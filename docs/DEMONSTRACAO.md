@@ -62,6 +62,20 @@ O condomínio precisa contratar sem favorecimento, com propostas comparáveis, d
 - **Qualidade da rede:** verificação de documentos, certificação por categoria e reputação no score.
 
 
+- Sistemas de apoio
+
+E-mail 
+https://temp-mail.org/pt/view/6abc14a61267f521c171618f
+
+Telefone
+https://geradornv.com.br/gerador-telefone/
+
+CNPJ
+https://www.4devs.com.br/gerador_de_cnpj
+
+CEP
+https://www.4devs.com.br/gerador_de_cep
+
 - Informações de Simulacao
 
 Cadastro 1
@@ -116,3 +130,7 @@ Limpeza e conservação
 Produtos
 Produtos de limpeza
 Material elétrico e iluminação
+
+
+AQUI. parei no cadastro de um prestador de servico.validar documento cadastra
+do - 29-09-2026
