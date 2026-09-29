@@ -60,3 +60,59 @@ O condomínio precisa contratar sem favorecimento, com propostas comparáveis, d
 - **Transparência:** o comparativo só abre com o mínimo de propostas e os votos ficam registrados.
 - **Privacidade:** o fornecedor só vê o endereço depois de aprovado.
 - **Qualidade da rede:** verificação de documentos, certificação por categoria e reputação no score.
+
+
+- Informações de Simulacao
+
+Cadastro 1
+
+Síndico ou Administradora
+Antonio Bandeira
+32988367667
+douglasabnovato@gmail.com
+Antonio@gmail
+
+Condomínio Hollywood
+94.770.617/0001-30
+Unidade Mel Gibson
+Av. Paulista, 2001 - Bela VistaSão Paulo - SP, 01311-300
+Administradora Hollywood Studio
+
+Convite
+65732EF4
+
+Necessidade 1
+
+Condomínio Hollywood
+Manutenção Preventiva de 3 Elevadores
+Acesso liberado de segunda a sexta, das 08h às 17h. Necessário apresentação de documento e uso de EPIs na portaria.
+Revisão técnica preventiva do sistema de automação de 3 elevadores: Atlas Schindler modelo Schindler 5000
+3
+
+Morador
+
+Bruno Mars
+8324367423
+nenar99271@hudzer.com
+9271@hudz
+Pedido para entrar Condomínio Hollywood
+Cadastrado e Aprovado
+
+Fornecedor
+
+Rei dos Condomínios
+Rei dos Condomínios e Irmãos
+6531334384
+gofifex843@hudzer.com
+Alto Boa Vista - MT
+Centro
+Avenida Três de Outubro 823 Loja A - 78665-970
+16.239.035/0001-18
+Produtos de limpeza e luminárias para áreas externas. Fazemos as aplicações e instalações.
+Servicos 
+Limpeza de caixa d'água
+Limpeza e conservação
+
+Produtos
+Produtos de limpeza
+Material elétrico e iluminação
