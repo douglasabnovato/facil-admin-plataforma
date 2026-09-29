@@ -78,6 +78,11 @@ https://www.4devs.com.br/gerador_de_cep
 
 - Informações de Simulacao
 
+Admin
+douglasabnovato@outlook.com
+Douglas Braga
+4ovato@outl1
+
 Cadastro 1
 
 Síndico ou Administradora
