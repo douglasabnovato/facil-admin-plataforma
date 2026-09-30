@@ -123,6 +123,7 @@ Rei dos Condomínios
 Rei dos Condomínios e Irmãos
 6531334384
 gofifex843@hudzer.com
+x843@hudz
 Alto Boa Vista - MT
 Centro
 Avenida Três de Outubro 823 Loja A - 78665-970
@@ -135,7 +136,3 @@ Limpeza e conservação
 Produtos
 Produtos de limpeza
 Material elétrico e iluminação
-
-
-AQUI. parei no cadastro de um prestador de servico.validar documento cadastra
-do - 29-09-2026
