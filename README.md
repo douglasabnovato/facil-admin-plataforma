@@ -2,7 +2,7 @@
 
 Marketplace de facilities para condomínios. Síndicos, administradoras e moradores publicam **listas de necessidades**. Fornecedores **verificados** da região recebem as oportunidades compatíveis, enviam **propostas por item** e o condomínio compara, aprova (com o conselho, quando o valor exige) e avalia.
 
-Web responsiva, construída com a stack do ecossistema learnTECH.
+Desenvolvida pela equipe do ecossistema LearnTECH desde a ideação com o cliente até a aprovação do mvp.
 
 ## O que resolve
 | Para o condomínio | Para o fornecedor |
