@@ -1,4 +1,4 @@
-# FacilAdmin — Plataforma
+# FacilAdmin Plataforma
 
 ## Marketplace inteligente de Facilities para Condomínios
 
