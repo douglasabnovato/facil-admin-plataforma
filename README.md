@@ -137,7 +137,8 @@ A plataforma possui uma arquitetura preparada para:
 
 ## Deploy
 
-- Vercel
+- Vercel (front)
+- Supabase Cloud (banco, Auth e Storage)
 
 ---
 
@@ -147,16 +148,19 @@ A plataforma possui uma arquitetura preparada para:
 facil-admin-plataforma
 
 ├── src
-│   ├── components
-│   ├── pages
-│   ├── services
-│   ├── hooks
-│   └── integrations
+│   ├── app            (rotas, layout, menu, páginas estáticas)
+│   ├── features       (auth, organizacoes, fornecedores, necessidades,
+│   │                   matching, propostas, contratacoes, painel,
+│   │                   notificacoes, admin; cada uma com telas e api.ts)
+│   ├── components     (Comuns, CamposEndereco, ui/ do shadcn)
+│   ├── lib            (cliente Supabase, tipos, formatos, endereço)
+│   └── test           (testes Vitest)
 │
 ├── supabase
-│   ├── migrations
-│   ├── functions
-│   └── tests
+│   ├── migrations     (5 migrações: esquema, RLS, funções, categorias, storage/agenda)
+│   └── tests          (ambiente.sql, cenario.py, rodar.sh)
+│
+├── .github/workflows  (ci.yml, banco.yml, manter-ativo.yml)
 │
 ├── docs
 │   ├── AMBIENTE-LOCAL.md
@@ -211,7 +215,7 @@ npm run dev
 Aplicação disponível em:
 
 ```
-http://localhost:5173
+http://127.0.0.1:5173
 ```
 
 ---
@@ -347,7 +351,7 @@ O projeto está preparado para hospedagem utilizando:
 
 ## Frontend
 
-Vercel
+Vercel: https://facil-admin-plataforma.vercel.app
 
 ## Backend
 

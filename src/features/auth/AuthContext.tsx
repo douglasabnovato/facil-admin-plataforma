@@ -24,12 +24,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let ativo = true;
-    supabase.auth.getSession().then(async ({ data }) => {
-      if (!ativo) return;
-      setSessao(data.session);
-      await carregarPerfil(data.session?.user.id);
-      if (ativo) setCarregando(false);
-    });
+    supabase.auth
+      .getSession()
+      .then(async ({ data }) => {
+        if (!ativo) return;
+        setSessao(data.session);
+        await carregarPerfil(data.session?.user.id);
+      })
+      .catch(() => {
+        /* Falha de rede ou sessão corrompida: segue como deslogado em vez de ficar carregando para sempre. */
+      })
+      .finally(() => {
+        if (ativo) setCarregando(false);
+      });
     const { data: sub } = supabase.auth.onAuthStateChange((_evento, nova) => {
       setSessao(nova);
       setTimeout(() => {
