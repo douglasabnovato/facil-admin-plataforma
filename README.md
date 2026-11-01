@@ -410,3 +410,9 @@ Marketplace de Facilities para Condomínios.
 Desenvolvido pelo ecossistema:
 
 **LearnTECH**
+
+## Próximos passos do responsável
+
+- Restaurar o projeto no Supabase, ou criar outro, e preencher as variáveis do site e dos workflows.
+
+Acompanhamento na issue #2.
