@@ -56,7 +56,7 @@ facil-admin-plataforma/
 │   ├── migrations/          01 esquema · 02 RLS · 03 funções · 04 categorias · 05 storage e agenda
 │   └── tests/               ambiente.sql, cenario.py, rodar.sh
 ├── docs/
-└── .github/workflows/       ci.yml, deploy.yml, banco.yml, manter-ativo.yml
+└── .github/workflows/       ci.yml, banco.yml, manter-ativo.yml
 ```
 Organização por *feature*: cada domínio reúne telas, chamadas ao banco (`api.ts`) e regras puras testáveis.
 

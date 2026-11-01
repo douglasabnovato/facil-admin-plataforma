@@ -27,7 +27,6 @@
 | Workflow | Quando roda | O que faz |
 |---|---|---|
 | `ci.yml` | push e PR | Lint, tipos, testes, build e o cenário de regras do banco num PostGIS |
-| `deploy.yml` | push na `main` | Build com `VITE_BASE=/facil-admin-plataforma/` e publicação no Pages com `404.html` |
 | `banco.yml` | manual | `supabase db push` no projeto de produção |
 | `manter-ativo.yml` | segundas 12:17 UTC | Consulta leve para o Supabase free não pausar |
 
