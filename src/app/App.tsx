@@ -32,6 +32,7 @@ const ContratacaoDetalhe = lazy(() => import("@/features/contratacoes/Contrataca
 const PerfilFornecedor = lazy(() => import("@/features/fornecedores/PerfilFornecedor"));
 const Notificacoes = lazy(() => import("@/features/notificacoes/Notificacoes"));
 const Admin = lazy(() => import("@/features/admin/Admin"));
+const Demonstracao = lazy(() => import("@/features/demonstracao/Demonstracao"));
 
 const cliente = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false } },
@@ -63,6 +64,7 @@ export default function App() {
                 <Route path="/entrar" element={<Entrar />} />
                 <Route path="/cadastro" element={<Cadastro />} />
                 <Route path="/nova-senha" element={<NovaSenha />} />
+                <Route path="/demonstracao" element={<Demonstracao />} />
                 <Route path="/termos" element={<Termos />} />
                 <Route path="/privacidade" element={<Privacidade />} />
                 <Route element={protegida(<Layout />)}>

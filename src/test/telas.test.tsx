@@ -2,12 +2,14 @@
  * telas.test.tsx — renderização das telas públicas e de componentes comuns.
  */
 import { describe, expect, it } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { AuthContexto, type AuthValor } from "@/features/auth/contexto";
 import Cadastro from "@/features/auth/Cadastro";
 import Entrar from "@/features/auth/Entrar";
 import { Score, SeloStatus } from "@/components/Comuns";
+import Demonstracao from "@/features/demonstracao/Demonstracao";
+import { mensagemAuth } from "@/features/auth/mensagens";
 
 const semLogin: AuthValor = { sessao: null, usuario: null, perfil: null, carregando: false, recarregarPerfil: async () => {}, sair: async () => {} };
 
@@ -31,6 +33,24 @@ describe("telas públicas", () => {
     montar(<Cadastro />, "/cadastro?tipo=fornecedor");
     expect(screen.getByRole("radio", { name: /Fornecedor/ })).toHaveAttribute("aria-checked", "true");
     expect(screen.getByRole("radio", { name: /Síndico/ })).toHaveAttribute("aria-checked", "false");
+  });
+});
+
+describe("demonstração sem backend", () => {
+  it("avisa que os dados são fictícios", () => {
+    montar(<Demonstracao />);
+    expect(screen.getByRole("note")).toHaveTextContent("dados fictícios");
+  });
+  it("aplica a regra de aprovação conforme o valor escolhido", () => {
+    montar(<Demonstracao />);
+    fireEvent.click(screen.getByRole("button", { name: "Escolher Fornecedor A" }));
+    expect(screen.getByText(/a síndica aprova sem votação/)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Escolher Fornecedor C" }));
+    expect(screen.getByText(/o conselho vota antes da contratação/)).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Escolher Fornecedor C" })).toHaveAttribute("aria-pressed", "true");
+  });
+  it("traduz a falha de rede no login", () => {
+    expect(mensagemAuth("Failed to fetch")).toMatch(/veja a demonstração/);
   });
 });
 
