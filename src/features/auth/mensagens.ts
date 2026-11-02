@@ -9,6 +9,7 @@ export function mensagemAuth(msg: string): string {
   if (/already registered/i.test(msg)) return "Este e-mail já tem cadastro. Tente entrar.";
   if (/password should be at least/i.test(msg)) return "A senha precisa ter ao menos 8 caracteres.";
   if (/rate limit/i.test(msg)) return "Muitas tentativas. Aguarde alguns minutos.";
+  if (/failed to fetch|networkerror|load failed/i.test(msg)) return "Não conseguimos falar com o servidor agora. Tente de novo mais tarde ou veja a demonstração.";
   return msg;
 }
 
