@@ -80,6 +80,9 @@ export default function Entrar() {
         <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
           {formState.isSubmitting ? "Entrando…" : "Entrar"}
         </Button>
+        <p className="text-center text-sm">
+          <Link to="/demonstracao" className="font-medium text-primary underline-offset-4 hover:underline">Ver a demonstração sem login</Link>
+        </p>
       </form>
     </LayoutAuth>
   );
