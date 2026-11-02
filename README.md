@@ -1,5 +1,7 @@
 # FacilAdmin Plataforma
 
+> **Estado em 02/11/2026:** `/demonstracao` funciona sem login e sem banco, com dados fictícios. O restante depende do backend, fora do ar (issue #2). Critérios em [docs/MVP.md](docs/MVP.md).
+
 ## Marketplace inteligente de Facilities para Condomínios
 
 O **FacilAdmin Plataforma** é uma aplicação web criada para conectar condomínios, administradoras, síndicos, moradores e fornecedores especializados em serviços e produtos para gestão condominial.
