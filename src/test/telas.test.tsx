@@ -49,6 +49,16 @@ describe("demonstração sem backend", () => {
     expect(screen.getByText(/o conselho vota antes da contratação/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Escolher Fornecedor C" })).toHaveAttribute("aria-pressed", "true");
   });
+  it("reordena as propostas pelo critério escolhido", () => {
+    montar(<Demonstracao />);
+    const nomes = () => screen.getAllByRole("heading", { level: 3 }).map((h) => h.textContent);
+    expect(nomes()).toEqual(["Fornecedor A", "Fornecedor B", "Fornecedor C"]);
+    fireEvent.change(screen.getByLabelText("Ordenar por"), { target: { value: "valor" } });
+    expect(nomes()).toEqual(["Fornecedor B", "Fornecedor A", "Fornecedor C"]);
+    fireEvent.change(screen.getByLabelText("Ordenar por"), { target: { value: "prazo" } });
+    expect(nomes()).toEqual(["Fornecedor C", "Fornecedor A", "Fornecedor B"]);
+    expect(screen.getByText(/atende ao mínimo de 3/)).toBeInTheDocument();
+  });
   it("traduz a falha de rede no login", () => {
     expect(mensagemAuth("Failed to fetch")).toMatch(/veja a demonstração/);
   });

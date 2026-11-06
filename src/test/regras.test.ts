@@ -2,7 +2,7 @@
  * regras.test.ts — regras do front que espelham o banco: comparativo, conselho, total, validação da lista e menu.
  */
 import { describe, expect, it } from "vitest";
-import { lerValor, menorPorItem, precisaConselho, totalProposta } from "@/features/propostas/regras";
+import { faltamPropostas, lerValor, menorPorItem, ordenarPropostas, precisaConselho, totalProposta } from "@/features/propostas/regras";
 import { validarLista } from "@/features/necessidades/validacao";
 import type { ListaRascunho } from "@/features/necessidades/api";
 import { itensMenu } from "@/app/menu";
@@ -65,3 +65,27 @@ describe("menu", () => {
 });
 
 /* Fim de regras.test.ts */
+
+describe("ordenação do comparativo", () => {
+  const lista = [
+    { id: "a", valor: 4200, prazoDias: 10, score: 91 },
+    { id: "b", valor: 3800, prazoDias: 20, score: 74 },
+    { id: "c", valor: 5600, prazoDias: 7, score: 62 },
+    { id: "d", valor: 3800, prazoDias: 7, score: 74 },
+  ];
+  it("ordena por aderência, valor e prazo", () => {
+    expect(ordenarPropostas(lista, "score").map((p) => p.id)).toEqual(["a", "b", "d", "c"]);
+    expect(ordenarPropostas(lista, "valor").map((p) => p.id)).toEqual(["b", "d", "a", "c"]);
+    expect(ordenarPropostas(lista, "prazo").map((p) => p.id)).toEqual(["c", "d", "a", "b"]);
+  });
+  it("não altera a lista original, nem com a ordem invertida", () => {
+    const invertida = [...lista].reverse();
+    expect(ordenarPropostas(invertida, "valor").map((p) => p.id)).toEqual(["d", "b", "a", "c"]);
+    expect(invertida.map((p) => p.id)).toEqual(["d", "c", "b", "a"]);
+  });
+  it("conta quantas propostas faltam para o mínimo de 3", () => {
+    expect(faltamPropostas(0)).toBe(3);
+    expect(faltamPropostas(2)).toBe(1);
+    expect(faltamPropostas(5)).toBe(0);
+  });
+});
