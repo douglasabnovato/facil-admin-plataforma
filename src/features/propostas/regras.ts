@@ -36,4 +36,19 @@ export function lerValor(txt: string): number | undefined {
   return Number.isFinite(n) && n >= 0 ? n : undefined;
 }
 
+/* Critérios de ordenação do comparativo. */
+export type CriterioOrdem = "score" | "valor" | "prazo";
+
+/* Ordena sem alterar a lista original. Empate mantém a ordem recebida. */
+export function ordenarPropostas<T extends { valor: number; prazoDias: number; score: number }>(lista: T[], criterio: CriterioOrdem): T[] {
+  const chave = (p: T) => (criterio === "score" ? -p.score : criterio === "valor" ? p.valor : p.prazoDias);
+  return lista.map((p, i) => ({ p, i })).sort((a, b) => chave(a.p) - chave(b.p) || a.i - b.i).map((x) => x.p);
+}
+
+/* Boa prática de condomínio: ao menos 3 propostas por escrito antes de decidir. */
+export const MINIMO_PROPOSTAS = 3;
+export function faltamPropostas(recebidas: number, minimo = MINIMO_PROPOSTAS): number {
+  return Math.max(0, minimo - recebidas);
+}
+
 /* Fim de regras.ts */

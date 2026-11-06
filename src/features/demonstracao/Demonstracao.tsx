@@ -7,15 +7,16 @@ import { Link } from "react-router-dom";
 import { Marca } from "@/app/Marca";
 import { Score, SeloStatus } from "@/components/Comuns";
 import { Button } from "@/components/ui/button";
+import { faltamPropostas, ordenarPropostas, type CriterioOrdem } from "@/features/propostas/regras";
 
-type Proposta = { id: string; fornecedor: string; valor: number; prazo: string; score: number; motivos: string };
+type Proposta = { id: string; fornecedor: string; valor: number; prazoDias: number; score: number; motivos: string };
 
 const LISTA = { titulo: "Manutenção elétrica e limpeza", condominio: "Condomínio Exemplo", itens: ["Revisão do quadro elétrico", "Limpeza mensal das áreas comuns"] };
 
 const PROPOSTAS: Proposta[] = [
-  { id: "a", fornecedor: "Fornecedor A", valor: 4200, prazo: "10 dias", score: 91, motivos: "Atende às 2 categorias, NR-10 válida, a 6 km" },
-  { id: "b", fornecedor: "Fornecedor B", valor: 3800, prazo: "20 dias", score: 74, motivos: "Atende às 2 categorias, a 18 km" },
-  { id: "c", fornecedor: "Fornecedor C", valor: 5600, prazo: "7 dias", score: 62, motivos: "Atende a 1 categoria, a 4 km" },
+  { id: "a", fornecedor: "Fornecedor A", valor: 4200, prazoDias: 10, score: 91, motivos: "Atende às 2 categorias, NR-10 válida, a 6 km" },
+  { id: "b", fornecedor: "Fornecedor B", valor: 3800, prazoDias: 20, score: 74, motivos: "Atende às 2 categorias, a 18 km" },
+  { id: "c", fornecedor: "Fornecedor C", valor: 5600, prazoDias: 7, score: 62, motivos: "Atende a 1 categoria, a 4 km" },
 ];
 
 const LIMITE_SEM_VOTACAO = 5000;
@@ -24,6 +25,9 @@ const moeda = (v: number) => v.toLocaleString("pt-BR", { style: "currency", curr
 /* Página pública com o comparativo de propostas e a regra de aprovação. */
 export default function Demonstracao() {
   const [escolhida, setEscolhida] = useState<Proposta | null>(null);
+  const [ordem, setOrdem] = useState<CriterioOrdem>("score");
+  const lista = ordenarPropostas(PROPOSTAS, ordem);
+  const faltam = faltamPropostas(PROPOSTAS.length);
 
   return (
     <div className="min-h-screen bg-background">
@@ -58,14 +62,33 @@ export default function Demonstracao() {
         </section>
 
         <section aria-labelledby="demo-propostas" className="space-y-3">
-          <h2 id="demo-propostas" className="text-lg font-semibold">Propostas recebidas</h2>
-          <ul className="space-y-3">
-            {PROPOSTAS.map((p) => (
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <h2 id="demo-propostas" className="text-lg font-semibold">Propostas recebidas</h2>
+            <label className="flex flex-col text-sm">
+              Ordenar por
+              <select
+                className="mt-1 rounded-md border bg-background px-2 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                value={ordem}
+                onChange={(e) => setOrdem(e.target.value as CriterioOrdem)}
+              >
+                <option value="score">Maior aderência</option>
+                <option value="valor">Menor valor</option>
+                <option value="prazo">Menor prazo</option>
+              </select>
+            </label>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {faltam === 0
+              ? `${PROPOSTAS.length} propostas por escrito: atende ao mínimo de 3 para comparar.`
+              : `Faltam ${faltam} propostas para o mínimo de 3.`}
+          </p>
+          <ul className="space-y-3" aria-label="Propostas na ordem escolhida">
+            {lista.map((p) => (
               <li key={p.id} className="rounded-xl border bg-card p-4">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div>
                     <h3 className="font-medium">{p.fornecedor}</h3>
-                    <p className="text-sm text-muted-foreground">{moeda(p.valor)} · {p.prazo}</p>
+                    <p className="text-sm text-muted-foreground">{moeda(p.valor)} · {p.prazoDias} dias</p>
                   </div>
                   <Score valor={p.score} />
                 </div>
