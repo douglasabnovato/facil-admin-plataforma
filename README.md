@@ -13,6 +13,7 @@ Site publicado: https://facil-admin-plataforma.vercel.app (HTTP 200 em 06/11/202
 - Critérios do MVP revistos com as medições do site publicado (PR #13, #14).
 - Ordenação das propostas por aderência, valor ou prazo, e aviso do mínimo de 3 propostas por escrito, com testes (PR #20).
 - Plano do ciclo com pesquisa e fontes em `docs/PLANO-DE-ACAO.md` (PR #20).
+- LCP móvel da `/demonstracao` medido depois do merge: mediana de 2,36 s (PR #22).
 
 **O que queremos fazer**
 

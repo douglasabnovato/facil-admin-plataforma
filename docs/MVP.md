@@ -1,6 +1,6 @@
 # MVP — critérios
 
-**Nível:** N3 (produto). **Resumo em 06/11/2026:** 3 de 12 atendem (1, 2, 4), 7 parciais, 2 não atendem (5, 7). **Finalizado: não.** Falta o código resolver os critérios 6, 7, 8, 11 e 12 (#5, #15, #16); 3, 5, 9 e 10 dependem do responsável (#2, #17, #18).
+**Nível:** N3 (produto). **Resumo em 06/11/2026:** 3 de 12 atendem (1, 2, 4), 8 parciais, 1 não atende (5). **Finalizado: não.** Falta o código resolver os critérios 6, 7, 8, 11 e 12 (#5, #15, #16); 3, 5, 9 e 10 dependem do responsável (#2, #17, #18).
 
 > Avaliação de 31/10/2026 com os mesmos 12 critérios usados no `movies`. "Não medido" significa que não há evidência, não que falhe.
 
@@ -12,7 +12,7 @@
 | 4 | Escopo enxuto | O que não entra está registrado | Atende: lista abaixo |
 | 5 | Medição de uso | A métrica principal é coletada | Não atende |
 | 6 | Falhas tratadas | Erro, vazio e carregamento têm resposta clara | Parcial: demonstração e falha de rede no login tratadas; telas logadas não testadas |
-| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Não atende: 3,59 s em 02/11/2026 |
+| 7 | Desempenho aceitável | LCP de até 2,5 s no celular | Parcial: `/demonstracao` com mediana de 2,36 s em 06/11/2026; telas logadas sem medição (#5, #16) |
 | 8 | Acessibilidade básica | Lighthouse e teclado | Parcial: demonstração e login sem falha; telas logadas não testadas |
 | 9 | Segurança e conformidade | Riscos decididos; termos cumpridos | Parcial: backend fora do ar; dados públicos de teste aceitos pelo responsável |
 | 10 | Entrega confiável | Publicação só depois de CI verde | Parcial |
@@ -48,3 +48,5 @@ Lighthouse 12.8.2 local, móvel, só na tela de login, porque o backend publicad
 - A demonstração ordena as propostas por aderência, valor ou prazo e avisa se o mínimo de 3 propostas por escrito foi atingido. Testes: `src/test/regras.test.ts` e `src/test/telas.test.tsx` (25 testes, antes 21). Nenhum critério mudou de situação.
 - Critério 10 segue "Parcial": a `main` não tem proteção (#18).
 - CI: na `main`, só o agendamento `Manter Supabase ativo` falha, porque o projeto está pausado e as Variables estão vazias (#2, #19). Os jobs `front` e `banco` passam.
+
+**Medição depois do merge (PR #21):** Lighthouse 12.8.2, móvel, 3 execuções em https://facil-admin-plataforma.vercel.app/demonstracao. LCP 3,60 / 2,36 / 2,36 s (mediana 2,36 s), desempenho 81 / 90 / 89, acessibilidade 100. A primeira execução, com cache frio, passou de 2,5 s. O critério 7 vai para "Parcial", porque as telas logadas não foram medidas.
