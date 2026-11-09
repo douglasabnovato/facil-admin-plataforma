@@ -2,6 +2,34 @@
 
 > O estado de cada critério fica só em [`MVP.md`](MVP.md). Este arquivo guarda o plano de cada ciclo. O plano anterior está em [`PLANO-ESTRATEGICO.md`](PLANO-ESTRATEGICO.md).
 
+## Ciclo de 07/11/2026
+
+Executado em 09/11/2026, nas branches `feature/2026-11-07` → `developer/sprint-2026-11-12` → `main` (o merge na `main` fica com o responsável). Nível: Produto (N3), 12 critérios. Escopo: critérios 6, 8, 11 e 12, no que não depende do Supabase pausado (#2).
+
+### Produto
+- **Problema e público:** síndicos e fornecedores precisam saber o que aconteceu quando a tela logada não carrega. Hoje o backend está pausado, e a tela de necessidades mandava "entrar em um condomínio" quando a consulta dos condomínios falhava.
+- **Hipótese e meta:** com erro claro e "Tentar de novo", quem encontra uma falha de rede tenta de novo em vez de abandonar. Meta técnica: toda falha das duas consultas da tela de necessidades vira mensagem com nova tentativa, com teste.
+- **O que a pesquisa trouxe:**
+  - O TanStack Query tenta 3 vezes antes de marcar erro, e `refetch` serve para o botão de nova tentativa; com várias consultas na tela, o estado de erro de cada uma precisa decidir a interface ([TanStack Query, novas tentativas](https://tanstack.com/query/latest/docs/framework/react/guides/query-retries)).
+  - Comandos de workflow (`::warning`) criam avisos visíveis no resumo do run sem falhar o job, o que deixa a ausência de configuração à vista sem um vermelho permanente ([GitHub, comandos de workflow](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-commands)).
+- **Backlog (impacto × esforço):**
+  1. Tratar a falha dos condomínios na tela de necessidades, com testes da tela logada (alto × baixo). Este ciclo.
+  2. Agendamento do Supabase com aviso sem Variables (#19) (médio × baixo). Este ciclo.
+  3. Registrar o cenário do banco como evidência do critério 11 (#15) (médio × baixo). Este ciclo.
+  4. Mesmo tratamento nas demais telas logadas e teste do axe (médio × médio). Issue.
+  5. Restaurar o backend (#2), medir uso (#17), proteger a `main` (#18). Responsável.
+- **Fora do escopo:** mexer no Supabase, Vercel, segredos ou nas contas de demonstração.
+
+### Engenharia
+- **Arquitetura:** React 18 + TanStack Query no front; Supabase (Postgres, RLS e funções) no back. As telas chamam `rpc()`; o erro do banco vira `Error` com a mensagem. `ErroCarga` e `EstadoVazio` em `src/components/Comuns.tsx` são as respostas padrão.
+- **Riscos:** testes com a API simulada não pegam erro do banco real; isso fica com o cenário `supabase/tests/cenario.py`, que roda no job `banco`.
+- **Qualidade:** `src/test/listas.test.tsx` (5 testes) cobre carregamento, erro com nova tentativa, falha dos condomínios, vazio e lista; lint, tipos, testes e build no job `front`.
+- **Definição de pronto:** CI verde, PR para a sprint mesclado e PR para a `main` aberto com `revisao-responsavel`.
+
+### Plano de ação
+- **Executa:** correção da tela de necessidades com testes; aviso no agendamento (#19); `MVP.md` com uma tabela só; README.
+- **Vira issue:** erro e vazio nas demais telas logadas, com teste; axe nas telas logadas; as do responsável seguem (#2, #17, #18).
+
 ## Ciclo de 03/11/2026
 
 Executado em 06/11/2026, nas branches `feature/2026-11-06` → `developer/sprint-2026-11-12` → `main`.
