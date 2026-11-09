@@ -22,9 +22,10 @@ export default defineConfig(({ mode }) => {
            */
           manualChunks(id) {
             if (!id.includes("node_modules")) return;
-            if (/[\/]node_modules[\/](react|react-dom|react-router|react-router-dom|@remix-run[\/]router|scheduler)[\/]/.test(id)) return "react";
-            if (/[\/]node_modules[\/]@supabase[\/]/.test(id)) return "supabase";
-            if (/[\/]node_modules[\/](react-hook-form|zod|@hookform[\/]resolvers)[\/]/.test(id)) return "forms";
+            /* O Vite entrega o id com barras normais, também no Windows. */
+            if (/\/node_modules\/(react|react-dom|react-router|react-router-dom|@remix-run\/router|scheduler)\//.test(id)) return "react";
+            if (/\/node_modules\/@supabase\//.test(id)) return "supabase";
+            if (/\/node_modules\/(react-hook-form|zod|@hookform\/resolvers)\//.test(id)) return "forms";
           },
         },
       },
