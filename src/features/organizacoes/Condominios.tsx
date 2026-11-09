@@ -91,9 +91,9 @@ function NovoCondominio({ aberto, fechar }: { aberto: boolean; fechar: () => voi
             {comoAdm && (
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Administradora</Label>
+                  <Label htmlFor="c-adm-id">Administradora</Label>
                   <Select value={admId} onValueChange={setAdmId}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="c-adm-id"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="nova">Nova administradora…</SelectItem>
                       {adms.map((a) => <SelectItem key={a.id} value={a.id}>{a.nome}</SelectItem>)}
