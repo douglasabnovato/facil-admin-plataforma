@@ -1,4 +1,6 @@
 # manter-ativo.yml — consulta leve semanal para o projeto Supabase gratuito não pausar por inatividade.
+# Sem as Variables (projeto pausado, #2), termina com aviso no log em vez de falhar toda semana (#19).
+# Com as Variables presentes e o Supabase fora do ar, continua falhando.
 name: Manter Supabase ativo
 
 on:
@@ -10,8 +12,16 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          curl -fsS "${{ vars.VITE_SUPABASE_URL }}/rest/v1/categorias?select=slug&limit=1" \
-            -H "apikey: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}" > /dev/null && echo "Supabase respondeu"
+      - name: Consultar o Supabase
+        env:
+          SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
+            echo "::warning title=Supabase sem configuração::As Variables VITE_SUPABASE_URL e VITE_SUPABASE_PUBLISHABLE_KEY estão vazias. Nada foi consultado. Ver issue #2."
+            exit 0
+          fi
+          curl -fsS "$SUPABASE_URL/rest/v1/categorias?select=slug&limit=1" \
+            -H "apikey: $SUPABASE_KEY" > /dev/null && echo "Supabase respondeu"
 
 # Fim de manter-ativo.yml
