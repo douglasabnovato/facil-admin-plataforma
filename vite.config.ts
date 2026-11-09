@@ -16,11 +16,15 @@ export default defineConfig(({ mode }) => {
     build: {
       rollupOptions: {
         output: {
-          manualChunks: {
-            react: ["react", "react-dom", "react-router-dom"],
-            supabase: ["@supabase/supabase-js"],
-            forms: ["react-hook-form", "zod", "@hookform/resolvers"],
-            radix: ["@radix-ui/react-dialog", "@radix-ui/react-select", "@radix-ui/react-dropdown-menu", "@radix-ui/react-tabs"],
+          /*
+           * Função em vez de objeto: com objeto, o Rollup leva para o chunk as dependências compartilhadas
+           * (o chunk do Radix passava a importar o do Supabase, e a /demonstracao baixava os dois).
+           */
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return;
+            if (/[\/]node_modules[\/](react|react-dom|react-router|react-router-dom|@remix-run[\/]router|scheduler)[\/]/.test(id)) return "react";
+            if (/[\/]node_modules[\/]@supabase[\/]/.test(id)) return "supabase";
+            if (/[\/]node_modules[\/](react-hook-form|zod|@hookform[\/]resolvers)[\/]/.test(id)) return "forms";
           },
         },
       },
