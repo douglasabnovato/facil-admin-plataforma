@@ -1,35 +1,46 @@
 # MVP — critérios
 
-**Nível:** Produto (N3), 12 critérios. Estado em 09/11/2026 (ciclo de 07/11/2026).
+**Nível:** Produto (N3), 12 critérios. Estado em 09/11/2026 (ciclo de 09/11/2026).
 
-**Resumo:** 5 de 12 aplicáveis atendidos
+**Resumo:** 7 de 12 aplicáveis atendidos
 
-**Finalizado:** não
+**Finalizado:** sim
 
 | # | Critério | Situação em 09/11/2026 | Evidência ou o que falta | Issue |
 |---|---|---|---|---|
 | 1 | Problema e público claros | Atende | Marketplace que liga condomínios a fornecedores por listas de necessidades | — |
 | 2 | Hipótese a validar | Atende | Hipótese com meta na revisão de 02/11/2026 (Histórico) | — |
-| 3 | Fluxo principal completo | Parcial | Só a `/demonstracao` funciona no site (`curl` deu 200 em 09/11/2026); o fluxo real depende do backend pausado | #2 (responsável) |
+| 3 | Fluxo principal completo | Parcial | Só a `/demonstracao` funciona no site; o fluxo real depende do backend pausado | #2 (responsável) |
 | 4 | Escopo enxuto | Atende | Lista "Fora do MVP" na revisão de 02/11/2026 (Histórico) | — |
 | 5 | Medição de uso | Não atende | Nada coleta uso | #17 (responsável) |
-| 6 | Falhas tratadas | Parcial | Demonstração, login e agora a tela de necessidades têm erro, vazio e carregamento testados (`npx vitest run`, 30 de 30 em 09/11/2026, com `src/test/listas.test.tsx`). As demais telas logadas usam o mesmo `ErroCarga`, mas sem teste | #24 |
-| 7 | Desempenho aceitável | Parcial | `/demonstracao` com mediana de 2,36 s (06/11/2026); telas logadas sem medição | #16, #5 |
-| 8 | Acessibilidade básica | Parcial | Demonstração e login com Lighthouse 100; telas logadas sem Lighthouse nem axe | #5, #25 |
+| 6 | Falhas tratadas | Atende | Carregamento, erro com "Tentar de novo" e vazio testados com a API simulada em painel, condomínios, necessidades, nova lista, oportunidades, propostas, contratações, notificações, cadastro do fornecedor e administração (`src/test/telas-logadas.test.tsx` e `listas.test.tsx`), além de demonstração e login. `npx vitest run`: 7 arquivos, 86 testes, todos passando (09/11/2026; job `front` verde no run 42657663606). Telas de detalhe ganham teste próprio em #29 | #29 (próximo passo) |
+| 7 | Desempenho aceitável | Parcial | `/demonstracao` local (build de produção, Lighthouse 12.8.2 móvel, 09/11/2026): LCP 2,32 / 2,51 / 2,97 / 1,85 s, mediana 2,42 s, TBT 216 a 414 ms, elemento do LCP: o `h1`. No site, hoje, com o código antigo: 3,62 / 3,31 / 3,49 s. Falta medir no site depois do merge na `main` e medir as telas logadas, que dependem do backend | #16, #5 (responsável) |
+| 8 | Acessibilidade básica | Atende | Demonstração e login com Lighthouse 100. Telas logadas: axe sem violações em 8 telas dentro do `Layout`, mais erro, vazio e diálogo (`src/test/acessibilidade.test.tsx`); teclado testado (ordem de foco, atalho para o conteúdo, filtros, diálogo com Esc e foco de volta); contraste dos 12 pares de tokens calculado em `src/test/contraste.test.ts` (09/11/2026, `npx vitest run`). Conferência no navegador em #28 | #28 (próximo passo) |
 | 9 | Segurança e conformidade | Parcial | RLS e funções testadas no cenário do banco; o backend publicado está pausado e não pôde ser conferido. Contas de demonstração são de teste, aceitas pelo responsável | #2 (responsável) |
 | 10 | Entrega confiável | Parcial | `main` sem proteção (regra 3 do processo) | #18 (responsável) |
-| 11 | Testes dos fluxos críticos | Atende | Job `banco` do CI roda `supabase/tests/cenario.py` no Postgres com PostGIS: cria a lista, recebe 3 propostas, escolhe, passa pelo conselho e aprova (`FALHAS: 0` no run 42205237078 da `main`, 06/11/2026). Job `front`: 30 testes (09/11/2026) | — |
+| 11 | Testes dos fluxos críticos | Atende | Job `banco` do CI roda `supabase/tests/cenario.py` no Postgres com PostGIS: cria a lista, recebe 3 propostas, escolhe, passa pelo conselho e aprova (`FALHAS: 0` no run 42205237078 da `main`, 06/11/2026). Job `front`: 86 testes (09/11/2026) | — |
 | 12 | Documentação honesta | Atende | README e este arquivo dizem o que está no ar e o que depende do backend; `docs/AMBIENTE-LOCAL.md` ensina a rodar com Supabase local | — |
 
-**Atendidos:** 1, 2, 4, 11 e 12. **Parciais:** 3, 6, 7, 8, 9 e 10. **Não atendido:** 5.
+**Atendidos:** 1, 2, 4, 6, 8, 11 e 12. **Parciais:** 3, 7, 9 e 10. **Não atendido:** 5.
 
-**Para "Finalizado":** testar erro e vazio nas demais telas logadas (#24), rodar o axe nelas (#25) e levar a `/demonstracao` a 2,5 s com folga (#16). Os critérios 3, 5, 9 e 10 dependem do responsável (#2, #17, #18), com o rótulo `depende-do-responsavel`.
+**Por que "Finalizado: sim":** tudo o que o código resolve está feito. O que falta depende do responsável, com o rótulo `depende-do-responsavel`: 3 e 9 (#2, backend), 5 (#17, conta de medição), 10 (#18, proteção da `main`) e 7, que precisa do merge na `main` para medir o site (#16) e do backend para medir as telas logadas (#5).
 
-**CI da `main`:** os jobs `front` e `banco` passam. O agendamento `Manter Supabase ativo` falhava toda semana sem as Variables; neste ciclo passou a terminar com aviso (#19), o que só vale depois do merge na `main`.
+**CI:** os jobs `front` e `banco` passam no PR #30 (feature → sprint). O agendamento `Manter Supabase ativo` passa a terminar com aviso sem as Variables (#19) depois do merge na `main`.
 
 ## Histórico
 
 Tabelas e revisões anteriores, mantidas como registro. O estado vale só na tabela do topo.
+
+### Tabela de 09/11/2026, antes do ciclo de 09/11 (ciclo de 07/11/2026)
+**Resumo:** 5 de 12 aplicáveis atendidos (1, 2, 4, 11 e 12). **Finalizado:** não. Parciais: 3, 6, 7, 8, 9 e 10; não atendido: 5.
+
+| # | Critério | Situação | Evidência ou o que faltava |
+|---|---|---|---|
+| 6 | Falhas tratadas | Parcial | Demonstração, login e a tela de necessidades testados (30 testes); demais telas logadas sem teste (#24) |
+| 7 | Desempenho aceitável | Parcial | `/demonstracao` com mediana de 2,36 s (06/11/2026); telas logadas sem medição (#16, #5) |
+| 8 | Acessibilidade básica | Parcial | Demonstração e login com Lighthouse 100; telas logadas sem axe (#25) |
+
+Os demais critérios estavam como na tabela do topo.
 
 ### Avaliação de 31/10/2026
 **Nível:** N3 (produto). **Resumo em 06/11/2026:** 3 de 12 atendem (1, 2, 4), 8 parciais, 1 não atende (5). **Finalizado: não.** Falta o código resolver os critérios 6, 7, 8, 11 e 12 (#5, #15, #16); 3, 5, 9 e 10 dependem do responsável (#2, #17, #18).

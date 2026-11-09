@@ -4,7 +4,7 @@
 
 ## Ciclo de 09/11/2026
 
-Executado em 09/11/2026, nas branches `feature/2026-11-09` → `developer/sprint-2026-11-12` (criada a partir da sprint). O merge na `main` fica com o responsável (PR #27). Nível: Produto (N3). Escopo: só o que o código resolve sem o Supabase pausado (#2): critério 6 (#24) e critério 8 (#25).
+Executado em 09/11/2026, nas branches `feature/2026-11-09` → `developer/sprint-2026-11-12` (criada a partir da sprint). O merge na `main` fica com o responsável (PR #27). Nível: Produto (N3). Escopo: só o que o código resolve sem o Supabase pausado (#2): critério 6 (#24), critério 8 (#25) e a parte de código do critério 7 (#16).
 
 ### Produto
 - **Problema e público:** síndicos, moradores e fornecedores precisam de resposta clara quando uma tela logada falha, fica vazia ou é usada só com teclado.
@@ -17,18 +17,20 @@ Executado em 09/11/2026, nas branches `feature/2026-11-09` → `developer/sprint
   2. Axe e teclado nas telas logadas, dentro do Layout (alto × médio). Este ciclo.
   3. Contraste das telas logadas num navegador real com a API simulada (médio × médio). Issue nova.
   4. Telas de detalhe (lista, oportunidade, contratação, condomínio, perfil do fornecedor, admin) com o mesmo teste (médio × médio). Issue nova.
-  5. LCP da `/demonstracao` no site depois do merge na `main` (#16); backend, medição e proteção da `main` (#2, #17, #18). Responsável.
+  5. Primeira carga da `/demonstracao` mais leve (#16) (médio × baixo). Este ciclo.
+  6. Medir o LCP no site depois do merge na `main` (#16) e nas telas logadas (#5); backend, medição e proteção da `main` (#2, #17, #18). Responsável.
 - **Fora do escopo:** Supabase, Vercel, segredos, contas de demonstração (são de teste e ficam como estão).
 
 ### Engenharia
 - **Arquitetura:** as telas usam `useQuery` com funções de `features/*/api.ts`; os testes trocam essas funções por `vi.fn()` (`vi.mock` com o módulo original preservado). As consultas de notificações saíram da tela para `features/notificacoes/api.ts`, para poder simular. `src/test/apoio.tsx` concentra os dados fictícios e a montagem (QueryClient sem novas tentativas, rota e autenticação).
-- **Correções que os testes acharam:** em Oportunidades, "Tentar de novo" refazia só a consulta de oportunidades, e a falha do cadastro do fornecedor ficava para sempre; agora refaz a que falhou. Esconder oportunidade e marcar notificação como lida falhavam em silêncio; agora avisam. Os diálogos de Condomínios não devolviam o foco ao botão (sem `DialogTrigger`). O seletor de administradora não tinha rótulo ligado.
+- **Correções que os testes acharam:** em Oportunidades, "Tentar de novo" refazia só a consulta de oportunidades, e a falha do cadastro do fornecedor ficava para sempre; agora refaz a que falhou. Esconder oportunidade e marcar notificação como lida falhavam em silêncio; agora avisam. Os diálogos de Condomínios não devolviam o foco ao botão (sem `DialogTrigger`). O seletor de administradora não tinha rótulo ligado. Nova lista, cadastro do fornecedor e administração ignoravam a falha de consultas secundárias. O token `--warning` dava 2,84:1 no selo âmbar (passa a 4,77:1).
+- **Desempenho (#16):** as fases do LCP no JSON do Lighthouse mostraram atraso de renderização de ~2,5 s, com o CSS do Google Fonts bloqueando ~0,9 s e o `supabase-js` e o Radix na primeira carga (o `manualChunks` em objeto fazia o chunk do Radix importar o do Supabase). Agora `configurado` vem de `lib/config.ts`, o `Layout` e o cliente do Supabase são carregados sob demanda (nas páginas públicas, quando o navegador fica ocioso) e a fonte não bloqueia a pintura. JS pré-carregado: ~191 → ~104 kB gzip. LCP local, Lighthouse 12.8.2 móvel: 2,32 / 2,51 / 2,97 / 1,85 s (mediana 2,42 s), antes 3,07 / 2,98 / 2,97 s.
 - **Riscos:** API simulada não pega erro do banco real (fica com o cenário do job `banco`); jsdom não mede contraste.
-- **Qualidade:** `npx vitest run` com 70 testes (eram 30); lint, tipos e build no job `front`.
+- **Qualidade:** `npx vitest run` com 86 testes em 7 arquivos (eram 30); `src/test/contraste.test.ts` calcula o contraste dos tokens; lint, tipos e build no job `front`. Revisão independente feita por subagente que viu só o diff: nenhum defeito alto ou médio; três ajustes de teste aplicados.
 - **Definição de pronto:** CI verde no PR para a sprint, `MVP.md` e README atualizados, comentário no PR #27.
 
 ### Plano de ação
-- **Executa:** #24 e #25 (código e testes), `MVP.md`, README, comentário no PR #27, LCP local da `/demonstracao` com build de produção.
+- **Executa:** #24 e #25 (código e testes), a parte de código de #16, `MVP.md`, README, comentário no PR #27.
 - **Vira issue:** contraste das telas logadas em navegador; testes das telas de detalhe.
 
 ## Ciclo de 07/11/2026
