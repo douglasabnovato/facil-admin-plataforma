@@ -108,7 +108,7 @@ describe("condomínios", () => {
     expect(api.meusCondominios).toHaveBeenCalledTimes(2);
   });
 
-  it("mostra o estado vazio com as duas formas de entrar", async () => {
+  it("mostra o estado vazio, com as ações de entrar no cabeçalho", async () => {
     api.meusCondominios.mockResolvedValue([]);
     montar(<Condominios />);
     expect(await screen.findByText("Você ainda não participa de nenhum condomínio.")).toBeInTheDocument();
@@ -290,7 +290,9 @@ describe("consultas secundárias", () => {
     api.from.mockImplementation(() => consultaComFalha("Sem permissão de administrador"));
     montar(<Admin />);
     expect(await screen.findByRole("alert")).toHaveTextContent("Sem permissão de administrador");
-    expect(screen.getByRole("button", { name: "Tentar de novo" })).toBeInTheDocument();
+    const chamadas = api.from.mock.calls.length;
+    fireEvent.click(screen.getByRole("button", { name: "Tentar de novo" }));
+    await waitFor(() => expect(api.from.mock.calls.length).toBeGreaterThan(chamadas));
   });
 });
 

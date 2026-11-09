@@ -202,7 +202,7 @@ describe("teclado nas telas logadas", () => {
     item.focus();
     await usuario.keyboard("{Enter}");
     expect(await screen.findByText("Detalhe da lista")).toBeInTheDocument();
-    expect(api.marcarLidas).toHaveBeenCalledWith("n1", expect.anything());
+    expect(api.marcarLidas.mock.calls[0][0]).toBe("n1");
   });
 
   it("erro de carga: o botão de nova tentativa é alcançado e acionado pelo teclado", async () => {
