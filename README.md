@@ -2,28 +2,30 @@
 
 > **Estado em 09/11/2026:** `/demonstracao` funciona sem login e sem banco, com dados fictícios. O restante depende do backend, pausado no Supabase (issue #2). Critérios em [docs/MVP.md](docs/MVP.md).
 
-## Estado e próximos passos (ciclo de 07/11/2026)
+## Estado e próximos passos (ciclo de 09/11/2026)
 
-Site publicado: https://facil-admin-plataforma.vercel.app (HTTP 200 em `/demonstracao` em 09/11/2026). Login e cadastro não funcionam enquanto o backend estiver pausado (#2); use a [demonstração](https://facil-admin-plataforma.vercel.app/demonstracao).
+Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` responde em 09/11/2026). Login e cadastro não funcionam enquanto o backend estiver pausado (#2); use a [demonstração](https://facil-admin-plataforma.vercel.app/demonstracao). Critérios: 7 de 12 atendidos, **Finalizado: sim** (o que falta depende do responsável), em [docs/MVP.md](docs/MVP.md).
 
-**O que foi feito neste ciclo**
+**O que foi feito neste ciclo** (PR #30, que entra no PR #27 para a `main`)
 
-- A tela de necessidades mostra a falha ao carregar os condomínios, com "Tentar de novo", em vez de pedir para entrar num condomínio. Cinco testes novos da tela logada, com a API simulada (`src/test/listas.test.tsx`).
-- O agendamento `Manter Supabase ativo` termina com aviso quando as Variables estão vazias, em vez de falhar toda semana (#19).
-- O [docs/MVP.md](docs/MVP.md) tem uma tabela só, a atual; o critério 11 cita o cenário do banco que roda no CI.
+- Telas logadas com erro, vazio e carregamento testados com a API simulada (`src/test/telas-logadas.test.tsx`). Os testes acharam e corrigiram: "Tentar de novo" de Oportunidades refazendo a consulta errada, ações que falhavam sem aviso e consultas secundárias que viravam formulário ou fila vazia.
+- Axe e teclado nas telas logadas (`src/test/acessibilidade.test.tsx`): zero violações; os diálogos de Condomínios passaram a devolver o foco ao botão. Contraste dos tokens calculado (`src/test/contraste.test.ts`); o âmbar dos selos foi escurecido para passar de 4,5:1.
+- `/demonstracao` mais leve: sem `supabase-js` nem Radix na primeira carga e fonte sem bloquear a pintura. LCP local de 2,98 s para 2,42 s (mediana); a medição no site depende do merge na `main` (#16).
+- 86 testes no job `front` (eram 30).
 
-**Antes (ciclo de 03/11):** demonstração sem backend, ordenação das propostas, LCP da `/demonstracao` com mediana de 2,36 s.
+**Antes (ciclo de 07/11):** falha dos condomínios tratada na tela de necessidades; agendamento do Supabase com aviso sem Variables (#19).
 
 **O que queremos fazer**
 
 - [#2](https://github.com/douglasabnovato/facil-admin-plataforma/issues/2) Restaurar o backend da plataforma publicada (responsável).
-- [#5](https://github.com/douglasabnovato/facil-admin-plataforma/issues/5) Medir LCP e navegação por teclado nas telas logadas.
-- [#16](https://github.com/douglasabnovato/facil-admin-plataforma/issues/16) Reduzir o LCP da `/demonstracao` para até 2,5 s.
+- [#5](https://github.com/douglasabnovato/facil-admin-plataforma/issues/5) Medir o LCP das telas logadas (responsável, depende de #2).
+- [#16](https://github.com/douglasabnovato/facil-admin-plataforma/issues/16) Medir o LCP da `/demonstracao` no site depois do merge na `main` (responsável).
 - [#17](https://github.com/douglasabnovato/facil-admin-plataforma/issues/17) Medir listas com 3 propostas e o tempo até a escolha (responsável).
 - [#18](https://github.com/douglasabnovato/facil-admin-plataforma/issues/18) Proteger a `main` com PR e CI obrigatórios (responsável).
 - [#19](https://github.com/douglasabnovato/facil-admin-plataforma/issues/19) Conferir o aviso do agendamento depois do merge na `main`.
-- [#24](https://github.com/douglasabnovato/facil-admin-plataforma/issues/24) Tratar erro e vazio nas demais telas logadas, com teste.
-- [#25](https://github.com/douglasabnovato/facil-admin-plataforma/issues/25) Rodar o axe nas telas logadas com a API simulada.
+- [#24](https://github.com/douglasabnovato/facil-admin-plataforma/issues/24) e [#25](https://github.com/douglasabnovato/facil-admin-plataforma/issues/25) Feitas no PR #30; fecham depois do merge na `main`.
+- [#28](https://github.com/douglasabnovato/facil-admin-plataforma/issues/28) Conferir o contraste das telas logadas no navegador.
+- [#29](https://github.com/douglasabnovato/facil-admin-plataforma/issues/29) Testar erro, vazio e axe nas telas logadas de detalhe.
 
 **Onde está a documentação**
 

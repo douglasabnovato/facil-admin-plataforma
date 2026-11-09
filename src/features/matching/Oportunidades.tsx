@@ -24,13 +24,14 @@ export default function Oportunidades() {
       toast.success("Oportunidade escondida");
       cliente.invalidateQueries({ queryKey: ["oportunidades"] });
     },
+    onError: (e: Error) => toast.error(`Não foi possível esconder: ${e.message}`),
   });
 
   const f = forn.data?.fornecedor;
   return (
     <>
       <CabecalhoPagina titulo="Oportunidades" descricao="Listas publicadas por condomínios dentro da sua área e das suas categorias." />
-      {forn.isLoading || q.isLoading ? <Carregando /> : forn.error || q.error ? <ErroCarga erro={forn.error ?? q.error} tentar={() => q.refetch()} /> : !f ? (
+      {forn.isLoading || q.isLoading ? <Carregando /> : forn.error || q.error ? <ErroCarga erro={forn.error ?? q.error} tentar={() => (forn.error ? forn.refetch() : q.refetch())} /> : !f ? (
         <EstadoVazio titulo="Complete o seu cadastro de fornecedor." texto="Com categorias, área de atendimento e documentos, você passa a receber oportunidades." acao={<Button asChild><Link to="/fornecedor">Completar cadastro</Link></Button>} />
       ) : !f.verificado ? (
         <EstadoVazio titulo="Seu cadastro está em verificação." texto="Assim que a equipe FacilAdmin verificar os documentos, as oportunidades aparecem aqui e você recebe um aviso." acao={<Button asChild variant="outline"><Link to="/fornecedor">Ver meu cadastro</Link></Button>} />
