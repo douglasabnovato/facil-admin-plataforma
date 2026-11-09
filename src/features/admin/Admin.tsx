@@ -14,7 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CabecalhoPagina, Carregando, EstadoVazio } from "@/components/Comuns";
+import { CabecalhoPagina, Carregando, ErroCarga, EstadoVazio } from "@/components/Comuns";
 import { formatarData, formatarDocumento, ROTULO_DOCUMENTO } from "@/lib/formatos";
 import { rpc, supabase } from "@/lib/supabase";
 import type { Categoria, Documento, Fornecedor } from "@/lib/tipos";
@@ -79,6 +79,7 @@ export default function Admin() {
   };
 
   if (q.isLoading) return <Carregando />;
+  if (q.error) return <ErroCarga erro={q.error} tentar={q.refetch} />;
   const forn = q.data?.fornecedores ?? [];
   const nomeForn = (id: string) => { const f = forn.find((x) => x.id === id); return f ? f.nome_fantasia || f.razao_social : id; };
   const fila = (q.data?.documentos ?? []).filter((d) => d.status === "em_analise");

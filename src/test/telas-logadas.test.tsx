@@ -1,6 +1,7 @@
 /*
  * telas-logadas.test.tsx — carregamento, erro com nova tentativa, vazio e dados nas telas logadas
- * (painel, condomínios, oportunidades, propostas, contratações e notificações), com a API simulada.
+ * (painel, condomínios, oportunidades, propostas, contratações e notificações) e a falha das consultas
+ * secundárias em nova lista, cadastro do fornecedor e administração, com a API simulada.
  * Não depende do Supabase publicado (#2). A tela de necessidades está em listas.test.tsx.
  */
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -20,11 +21,17 @@ const api = vi.hoisted(() => ({
   listarNotificacoes: vi.fn(),
   marcarLidas: vi.fn(),
   toastErro: vi.fn(),
+  listarCategorias: vi.fn(),
+  meusDocumentos: vi.fn(),
+  from: vi.fn(),
 }));
 
-vi.mock("@/lib/supabase", async (original) => ({ ...(await original<object>()), rpc: api.rpc }));
+vi.mock("@/lib/supabase", async (original) => ({ ...(await original<object>()), rpc: api.rpc, supabase: { from: api.from } }));
+vi.mock("@/features/necessidades/api", async (original) => ({ ...(await original<object>()), listarCategorias: api.listarCategorias }));
 vi.mock("@/features/organizacoes/api", async (original) => ({ ...(await original<object>()), meusCondominios: api.meusCondominios }));
-vi.mock("@/features/fornecedores/api", async (original) => ({ ...(await original<object>()), meuFornecedor: api.meuFornecedor }));
+vi.mock("@/features/fornecedores/api", async (original) => ({
+  ...(await original<object>()), meuFornecedor: api.meuFornecedor, meusDocumentos: api.meusDocumentos,
+}));
 vi.mock("@/features/matching/api", async (original) => ({
   ...(await original<object>()), oportunidades: api.oportunidades, ignorarOportunidade: api.ignorarOportunidade,
 }));
@@ -42,6 +49,9 @@ import Oportunidades from "@/features/matching/Oportunidades";
 import MinhasPropostas from "@/features/propostas/MinhasPropostas";
 import Contratacoes from "@/features/contratacoes/Contratacoes";
 import Notificacoes from "@/features/notificacoes/Notificacoes";
+import NovaLista from "@/features/necessidades/NovaLista";
+import PerfilFornecedor from "@/features/fornecedores/PerfilFornecedor";
+import Admin from "@/features/admin/Admin";
 
 beforeEach(() => {
   Object.values(api).forEach((f) => f.mockReset());
@@ -236,6 +246,51 @@ describe("notificações", () => {
     montar(<Notificacoes />);
     fireEvent.click(await screen.findByRole("button", { name: /Marcar todas como lidas/ }));
     await waitFor(() => expect(api.toastErro).toHaveBeenCalledWith("Não foi possível marcar como lida: Sem conexão"));
+  });
+});
+
+/* Consulta do Supabase que sempre falha, com a cadeia select/order/eq. */
+function consultaComFalha(mensagem: string) {
+  const resposta = { data: null, error: { message: mensagem } };
+  const cadeia: Record<string, unknown> = {};
+  for (const m of ["select", "order", "eq"]) cadeia[m] = () => cadeia;
+  cadeia.then = (ok: (r: typeof resposta) => unknown) => Promise.resolve(resposta).then(ok);
+  return cadeia;
+}
+
+describe("consultas secundárias", () => {
+  it("nova lista: falha dos condomínios vira erro com nova tentativa, não um formulário vazio", async () => {
+    api.meusCondominios.mockRejectedValueOnce(new Error("Sem conexão com o servidor")).mockResolvedValue([condominio]);
+    api.listarCategorias.mockResolvedValue([]);
+    montar(<NovaLista />, { rota: "/listas/nova" });
+    expect(await screen.findByRole("alert")).toHaveTextContent("Sem conexão com o servidor");
+    await tentarDeNovo("Nova lista de necessidades");
+  });
+
+  it("nova lista: falha das categorias vira erro com nova tentativa", async () => {
+    api.meusCondominios.mockResolvedValue([condominio]);
+    api.listarCategorias.mockRejectedValueOnce(new Error("Falha nas categorias")).mockResolvedValue([]);
+    montar(<NovaLista />, { rota: "/listas/nova" });
+    expect(await screen.findByRole("alert")).toHaveTextContent("Falha nas categorias");
+    await tentarDeNovo("Nova lista de necessidades");
+  });
+
+  it("cadastro do fornecedor: falha das categorias e dos documentos aparece", async () => {
+    api.meuFornecedor.mockResolvedValue({ fornecedor, categorias: [] });
+    api.meusDocumentos.mockRejectedValue(new Error("Falha nos documentos"));
+    api.listarCategorias.mockRejectedValueOnce(new Error("Falha nas categorias")).mockResolvedValue([]);
+    montar(<PerfilFornecedor />, { perfil: perfilFornecedor });
+    expect(await screen.findByText("Falha nas categorias")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Tentar de novo" }));
+    expect(await screen.findByText("Falha nos documentos")).toBeInTheDocument();
+    expect(screen.queryByText("Falha nas categorias")).not.toBeInTheDocument();
+  });
+
+  it("administração: falha ao carregar fornecedores e documentos vira erro, não uma fila vazia", async () => {
+    api.from.mockImplementation(() => consultaComFalha("Sem permissão de administrador"));
+    montar(<Admin />);
+    expect(await screen.findByRole("alert")).toHaveTextContent("Sem permissão de administrador");
+    expect(screen.getByRole("button", { name: "Tentar de novo" })).toBeInTheDocument();
   });
 });
 

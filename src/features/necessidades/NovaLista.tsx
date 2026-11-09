@@ -90,7 +90,9 @@ export default function NovaLista() {
     setF((v) => ({ ...v, itens: v.itens.map((it, k) => (k === i ? { ...it, [campo]: valor } : it)) }));
 
   if (conds.isLoading || cats.isLoading || existente.isLoading) return <Carregando />;
-  if (existente.error) return <ErroCarga erro={existente.error} />;
+  if (existente.error) return <ErroCarga erro={existente.error} tentar={existente.refetch} />;
+  if (conds.error) return <ErroCarga erro={conds.error} tentar={conds.refetch} />;
+  if (cats.error) return <ErroCarga erro={cats.error} tentar={cats.refetch} />;
 
   return (
     <>
