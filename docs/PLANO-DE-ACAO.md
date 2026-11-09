@@ -2,6 +2,35 @@
 
 > O estado de cada critério fica só em [`MVP.md`](MVP.md). Este arquivo guarda o plano de cada ciclo. O plano anterior está em [`PLANO-ESTRATEGICO.md`](PLANO-ESTRATEGICO.md).
 
+## Ciclo de 09/11/2026
+
+Executado em 09/11/2026, nas branches `feature/2026-11-09` → `developer/sprint-2026-11-12` (criada a partir da sprint). O merge na `main` fica com o responsável (PR #27). Nível: Produto (N3). Escopo: só o que o código resolve sem o Supabase pausado (#2): critério 6 (#24) e critério 8 (#25).
+
+### Produto
+- **Problema e público:** síndicos, moradores e fornecedores precisam de resposta clara quando uma tela logada falha, fica vazia ou é usada só com teclado.
+- **Hipótese e meta:** toda tela logada com consulta mostra carregamento, erro com "Tentar de novo" e vazio, com teste; o axe não acha violação nas telas logadas, e o teclado alcança e aciona tudo.
+- **O que a pesquisa trouxe:**
+  - O axe declara suporte limitado ao jsdom e diz que a regra de contraste não funciona nele; a recomendação é desligá-la ali e medir contraste num navegador real ([README do axe-core 4.14](https://cdn.jsdelivr.net/npm/axe-core@4.14.0/README.md); [relato sobre contraste no CI](https://dev.to/jangwook_kim_e31e7291ad98/why-color-contrast-disappears-when-you-put-axe-core-in-ci-2ak8)). Por isso o contraste das telas logadas virou issue própria.
+  - No padrão de diálogo modal, ao fechar, o foco volta ao elemento que abriu o diálogo ([WAI-ARIA APG, Dialog (Modal)](https://www.w3.org/WAI/ARIA/apg/patterns/dialogmodal/); [WCAG, técnica H102](https://www.w3.org/WAI/WCAG22/Techniques/html/H102)). O teste de teclado mostrou que os dois diálogos de Condomínios não faziam isso.
+- **Backlog (impacto × esforço):**
+  1. Erro, vazio e carregamento testados em painel, condomínios, oportunidades, propostas, contratações e notificações (alto × baixo). Este ciclo.
+  2. Axe e teclado nas telas logadas, dentro do Layout (alto × médio). Este ciclo.
+  3. Contraste das telas logadas num navegador real com a API simulada (médio × médio). Issue nova.
+  4. Telas de detalhe (lista, oportunidade, contratação, condomínio, perfil do fornecedor, admin) com o mesmo teste (médio × médio). Issue nova.
+  5. LCP da `/demonstracao` no site depois do merge na `main` (#16); backend, medição e proteção da `main` (#2, #17, #18). Responsável.
+- **Fora do escopo:** Supabase, Vercel, segredos, contas de demonstração (são de teste e ficam como estão).
+
+### Engenharia
+- **Arquitetura:** as telas usam `useQuery` com funções de `features/*/api.ts`; os testes trocam essas funções por `vi.fn()` (`vi.mock` com o módulo original preservado). As consultas de notificações saíram da tela para `features/notificacoes/api.ts`, para poder simular. `src/test/apoio.tsx` concentra os dados fictícios e a montagem (QueryClient sem novas tentativas, rota e autenticação).
+- **Correções que os testes acharam:** em Oportunidades, "Tentar de novo" refazia só a consulta de oportunidades, e a falha do cadastro do fornecedor ficava para sempre; agora refaz a que falhou. Esconder oportunidade e marcar notificação como lida falhavam em silêncio; agora avisam. Os diálogos de Condomínios não devolviam o foco ao botão (sem `DialogTrigger`). O seletor de administradora não tinha rótulo ligado.
+- **Riscos:** API simulada não pega erro do banco real (fica com o cenário do job `banco`); jsdom não mede contraste.
+- **Qualidade:** `npx vitest run` com 70 testes (eram 30); lint, tipos e build no job `front`.
+- **Definição de pronto:** CI verde no PR para a sprint, `MVP.md` e README atualizados, comentário no PR #27.
+
+### Plano de ação
+- **Executa:** #24 e #25 (código e testes), `MVP.md`, README, comentário no PR #27, LCP local da `/demonstracao` com build de produção.
+- **Vira issue:** contraste das telas logadas em navegador; testes das telas de detalhe.
+
 ## Ciclo de 07/11/2026
 
 Executado em 09/11/2026, nas branches `feature/2026-11-07` → `developer/sprint-2026-11-12` → `main` (o merge na `main` fica com o responsável). Nível: Produto (N3), 12 critérios. Escopo: critérios 6, 8, 11 e 12, no que não depende do Supabase pausado (#2).
