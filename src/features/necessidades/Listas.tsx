@@ -62,7 +62,7 @@ export default function Listas() {
           ))}
         </div>
       </div>
-      {listas.isLoading ? <Carregando /> : listas.error ? <ErroCarga erro={listas.error} tentar={listas.refetch} /> : !ativos.length && !conds.isLoading ? (
+      {listas.isLoading || conds.isLoading ? <Carregando /> : listas.error ? <ErroCarga erro={listas.error} tentar={listas.refetch} /> : conds.error ? <ErroCarga erro={conds.error} tentar={conds.refetch} /> : !ativos.length ? (
         <EstadoVazio titulo="Entre em um condomínio primeiro." texto="As listas pertencem a um condomínio." acao={<Button asChild variant="outline"><Link to="/condominios">Ir para condomínios</Link></Button>} />
       ) : !visiveis.length ? (
         <EstadoVazio titulo="Nenhuma lista aqui." texto="Crie uma lista com os itens de que o condomínio precisa: os fornecedores compatíveis recebem a oportunidade." />
