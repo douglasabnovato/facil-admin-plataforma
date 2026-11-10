@@ -15,7 +15,7 @@ concurrency:
 jobs:
   front:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,6 +30,17 @@ jobs:
         env:
           VITE_SUPABASE_URL: http://localhost:54321
           VITE_SUPABASE_PUBLISHABLE_KEY: ci
+      # Ponta a ponta no navegador (critério 3): demonstração, teclado e login com o backend fora do ar, com axe.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: relatorio-playwright
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
 
   banco:
     runs-on: ubuntu-latest

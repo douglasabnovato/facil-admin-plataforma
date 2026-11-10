@@ -220,7 +220,7 @@ export default function NovaLista() {
               )}
               {podePublicar ? (
                 <>
-                  <Button className="w-full" onClick={() => enviar(true)} disabled={salvar.isPending}>Salvar e publicar</Button>
+                  <Button className="w-full" onClick={() => enviar(true)} disabled={salvar.isPending} data-evento="lista-publicar">Salvar e publicar</Button>
                   <Button className="w-full" variant="outline" onClick={() => enviar(false)} disabled={salvar.isPending}>Salvar rascunho</Button>
                 </>
               ) : (

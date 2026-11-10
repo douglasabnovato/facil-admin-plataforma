@@ -1,18 +1,18 @@
 # MVP — critérios
 
-**Nível:** Produto (N3), 12 critérios. Estado em 09/11/2026 (ciclo de 09/11/2026); critério 10 revisto em 10/11/2026.
+**Nível:** Produto (N3), 12 critérios. Estado em 10/11/2026 (ciclo da faixa de 90%: `feature/2026-11-10-b`, decisões D1 a D7 de `engenharia/decisoes/2026-11-10-ciclo-faixa-90.md`).
 
 **Resumo:** 8 de 12 aplicáveis atendidos
 
 **Finalizado:** sim
 
-| # | Critério | Situação em 09/11/2026 | Evidência ou o que falta | Issue |
+| # | Critério | Situação em 10/11/2026 | Evidência ou o que falta | Issue |
 |---|---|---|---|---|
 | 1 | Problema e público claros | Atende | Marketplace que liga condomínios a fornecedores por listas de necessidades | — |
 | 2 | Hipótese a validar | Atende | Hipótese com meta na revisão de 02/11/2026 (Histórico) | — |
-| 3 | Fluxo principal completo | Parcial | Só a `/demonstracao` funciona no site; o fluxo real depende do backend pausado | #2 (responsável) |
+| 3 | Fluxo principal completo | Parcial | Playwright no CI (job `front`, `npm run test:e2e`): na `/demonstracao`, compara 3 propostas, ordena, escolhe e mostra a regra de aprovação; por teclado; login com envio real pelo navegador e o backend fora do ar mostrando a falha; axe sem violações; claro e escuro. Local, 10/11/2026: 6 de 6. No site, só a `/demonstracao` funciona: o endereço do Supabase do build publicado não resolve no DNS (`curl` em `/auth/v1/health`, 10/11/2026: código 6, host não encontrado). O fluxo real depende do backend | #2 (responsável) |
 | 4 | Escopo enxuto | Atende | Lista "Fora do MVP" na revisão de 02/11/2026 (Histórico) | — |
-| 5 | Medição de uso | Não atende | Nada coleta uso | #17 (responsável) |
+| 5 | Medição de uso | Parcial | Código pronto; falta a conta (decisão D5). GoatCounter (`https://douglasabnovato.goatcounter.com/count`, sem cookie) só no build de produção e fora do Playwright, com os eventos `demonstracao-escolher` e `lista-publicar`. `npx vitest run src/test/medicao.test.ts`, 10/11/2026: 4 de 4 | #17 (responsável) |
 | 6 | Falhas tratadas | Atende | Carregamento, erro com "Tentar de novo" e vazio testados com a API simulada em painel, condomínios, necessidades, nova lista, oportunidades, propostas, contratações, notificações, cadastro do fornecedor e administração (`src/test/telas-logadas.test.tsx` e `listas.test.tsx`), além de demonstração e login. `npx vitest run`: 7 arquivos, 86 testes, todos passando (09/11/2026; job `front` verde no run 42657663606). Telas de detalhe ganham teste próprio em #29 | #29 (próximo passo) |
 | 7 | Desempenho aceitável | Parcial | `/demonstracao` local (build de produção, Lighthouse 12.8.2 móvel, 09/11/2026): LCP 2,32 / 2,51 / 2,97 / 1,85 s, mediana 2,42 s, TBT 216 a 414 ms, elemento do LCP: o `h1`. No site, hoje, com o código antigo: 3,62 / 3,31 / 3,49 s. Falta medir no site depois do merge na `main` e medir as telas logadas, que dependem do backend | #16, #5 (responsável) |
 | 8 | Acessibilidade básica | Atende | Demonstração e login com Lighthouse 100. Telas logadas: axe sem violações em 8 telas dentro do `Layout`, mais erro, vazio e diálogo (`src/test/acessibilidade.test.tsx`); teclado testado (ordem de foco, atalho para o conteúdo, filtros, diálogo com Esc e foco de volta); contraste dos 12 pares de tokens calculado em `src/test/contraste.test.ts` (09/11/2026, `npx vitest run`). Conferência no navegador em #28 | #28 (próximo passo) |
@@ -21,15 +21,23 @@
 | 11 | Testes dos fluxos críticos | Atende | Job `banco` do CI roda `supabase/tests/cenario.py` no Postgres com PostGIS: cria a lista, recebe 3 propostas, escolhe, passa pelo conselho e aprova (`FALHAS: 0` no run 42205237078 da `main`, 06/11/2026). Job `front`: 86 testes (09/11/2026) | — |
 | 12 | Documentação honesta | Atende | README e este arquivo dizem o que está no ar e o que depende do backend; `docs/AMBIENTE-LOCAL.md` ensina a rodar com Supabase local | — |
 
-**Atendidos:** 1, 2, 4, 6, 8, 10, 11 e 12. **Parciais:** 3, 7 e 9. **Não atendido:** 5.
+**Atendidos:** 1, 2, 4, 6, 8, 10, 11 e 12. **Parciais:** 3, 5, 7 e 9. **Não atendidos:** nenhum.
 
-**Por que "Finalizado: sim":** tudo o que o código resolve está feito. O que falta depende do responsável, com o rótulo `depende-do-responsavel`: 3 e 9 (#2, backend), 5 (#17, conta de medição) e 7, que precisa do merge na `main` para medir o site (#16) e do backend para medir as telas logadas (#5).
+**Por que "Finalizado: sim":** tudo o que o código resolve está feito. O que falta depende do responsável, com o rótulo `depende-do-responsavel`: 3 e 9 (#2, backend, com passo a passo), 5 (#17, conta do GoatCounter) e 7, que precisa do merge na `main` para medir o site (#16) e do backend para medir as telas logadas (#5).
 
-**CI:** os jobs `front` e `banco` passam no PR #30 (feature → sprint). O agendamento `Manter Supabase ativo` passa a terminar com aviso sem as Variables (#19) depois do merge na `main`.
+**CI:** os jobs `front` (agora com o Playwright) e `banco` rodam no PR feature → sprint deste ciclo. O agendamento `Manter Supabase ativo` passa a terminar com aviso sem as Variables (#19) depois do merge na `main`.
 
 ## Histórico
 
 Tabelas e revisões anteriores, mantidas como registro. O estado vale só na tabela do topo.
+
+### Tabela de 09/11/2026 (ciclo de 09/11/2026)
+**Resumo:** 8 de 12 aplicáveis atendidos (1, 2, 4, 6, 8, 10, 11 e 12). **Finalizado:** sim.
+
+| # | Critério | Situação | Evidência ou o que faltava |
+|---|---|---|---|
+| 3 | Fluxo principal completo | Parcial | Só a `/demonstracao` funcionava no site; sem teste no navegador |
+| 5 | Medição de uso | Não atende | Nada coletava uso |
 
 ### Tabela de 09/11/2026, antes do ciclo de 09/11 (ciclo de 07/11/2026)
 **Resumo:** 5 de 12 aplicáveis atendidos (1, 2, 4, 11 e 12). **Finalizado:** não. Parciais: 3, 6, 7, 8, 9 e 10; não atendido: 5.
