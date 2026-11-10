@@ -4,7 +4,7 @@
 
 ## Estado e próximos passos (ciclo de 09/11/2026)
 
-Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` responde em 09/11/2026). Login e cadastro não funcionam enquanto o backend estiver pausado (#2); use a [demonstração](https://facil-admin-plataforma.vercel.app/demonstracao). Critérios: 7 de 12 atendidos, **Finalizado: sim** (o que falta depende do responsável), em [docs/MVP.md](docs/MVP.md).
+Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` responde em 09/11/2026). Login e cadastro não funcionam enquanto o backend estiver pausado (#2); use a [demonstração](https://facil-admin-plataforma.vercel.app/demonstracao). Critérios: 8 de 12 atendidos, **Finalizado: sim** (o que falta depende do responsável), em [docs/MVP.md](docs/MVP.md). A `main` está protegida desde 10/11/2026 (ruleset `principal-protegida`).
 
 **O que foi feito neste ciclo** (PR #30, que entra no PR #27 para a `main`)
 
@@ -21,7 +21,7 @@ Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` respo
 - [#5](https://github.com/douglasabnovato/facil-admin-plataforma/issues/5) Medir o LCP das telas logadas (responsável, depende de #2).
 - [#16](https://github.com/douglasabnovato/facil-admin-plataforma/issues/16) Medir o LCP da `/demonstracao` no site depois do merge na `main` (responsável).
 - [#17](https://github.com/douglasabnovato/facil-admin-plataforma/issues/17) Medir listas com 3 propostas e o tempo até a escolha (responsável).
-- [#18](https://github.com/douglasabnovato/facil-admin-plataforma/issues/18) Proteger a `main` com PR e CI obrigatórios (responsável).
+- [#18](https://github.com/douglasabnovato/facil-admin-plataforma/issues/18) Proteger a `main`: feito em 10/11/2026; a issue fecha no merge da `main`.
 - [#19](https://github.com/douglasabnovato/facil-admin-plataforma/issues/19) Conferir o aviso do agendamento depois do merge na `main`.
 - [#24](https://github.com/douglasabnovato/facil-admin-plataforma/issues/24) e [#25](https://github.com/douglasabnovato/facil-admin-plataforma/issues/25) Feitas no PR #30; fecham depois do merge na `main`.
 - [#28](https://github.com/douglasabnovato/facil-admin-plataforma/issues/28) Conferir o contraste das telas logadas no navegador.
