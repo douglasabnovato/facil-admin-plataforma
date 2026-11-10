@@ -100,7 +100,7 @@ function Documentos({ fornecedorId, exigidos }: { fornecedorId: string; exigidos
         <Button onClick={() => enviar.mutate()} disabled={!arquivo || enviar.isPending}>
           <FileUp className="mr-2 h-4 w-4" aria-hidden="true" />{enviar.isPending ? "Enviando…" : "Enviar documento"}
         </Button>
-        {docs.isLoading ? <Carregando /> : (
+        {docs.isLoading ? <Carregando /> : docs.error ? <ErroCarga erro={docs.error} tentar={docs.refetch} /> : (
           <ul className="divide-y">
             {(docs.data ?? []).map((d) => (
               <li key={d.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
@@ -160,6 +160,7 @@ export default function PerfilFornecedor() {
 
   if (q.isLoading || cats.isLoading) return <Carregando />;
   if (q.error) return <ErroCarga erro={q.error} tentar={q.refetch} />;
+  if (cats.error) return <ErroCarga erro={cats.error} tentar={cats.refetch} />;
   const forn = q.data?.fornecedor;
   const doc = digitos(f.documento);
   const valido = f.razao_social.trim().length >= 3 && (doc.length === 11 || doc.length === 14) && enderecoValido(endereco) && categorias.length > 0;
