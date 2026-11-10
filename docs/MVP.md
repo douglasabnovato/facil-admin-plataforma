@@ -1,8 +1,8 @@
 # MVP — critérios
 
-**Nível:** Produto (N3), 12 critérios. Estado em 09/11/2026 (ciclo de 09/11/2026).
+**Nível:** Produto (N3), 12 critérios. Estado em 09/11/2026 (ciclo de 09/11/2026); critério 10 revisto em 10/11/2026.
 
-**Resumo:** 7 de 12 aplicáveis atendidos
+**Resumo:** 8 de 12 aplicáveis atendidos
 
 **Finalizado:** sim
 
@@ -17,13 +17,13 @@
 | 7 | Desempenho aceitável | Parcial | `/demonstracao` local (build de produção, Lighthouse 12.8.2 móvel, 09/11/2026): LCP 2,32 / 2,51 / 2,97 / 1,85 s, mediana 2,42 s, TBT 216 a 414 ms, elemento do LCP: o `h1`. No site, hoje, com o código antigo: 3,62 / 3,31 / 3,49 s. Falta medir no site depois do merge na `main` e medir as telas logadas, que dependem do backend | #16, #5 (responsável) |
 | 8 | Acessibilidade básica | Atende | Demonstração e login com Lighthouse 100. Telas logadas: axe sem violações em 8 telas dentro do `Layout`, mais erro, vazio e diálogo (`src/test/acessibilidade.test.tsx`); teclado testado (ordem de foco, atalho para o conteúdo, filtros, diálogo com Esc e foco de volta); contraste dos 12 pares de tokens calculado em `src/test/contraste.test.ts` (09/11/2026, `npx vitest run`). Conferência no navegador em #28 | #28 (próximo passo) |
 | 9 | Segurança e conformidade | Parcial | RLS e funções testadas no cenário do banco; o backend publicado está pausado e não pôde ser conferido. Contas de demonstração são de teste, aceitas pelo responsável | #2 (responsável) |
-| 10 | Entrega confiável | Parcial | `main` sem proteção (regra 3 do processo) | #18 (responsável) |
+| 10 | Entrega confiável | Atende | `gh api repos/douglasabnovato/facil-admin-plataforma/rulesets`, 10/11/2026: ruleset `principal-protegida` ativo (exige PR, bloqueia force push e exclusão); o workflow `CI` (jobs `front` e `banco`) roda em todo PR. A Vercel publica a `main`, que só recebe merge de PR | #18 (fecha no merge da `main`) |
 | 11 | Testes dos fluxos críticos | Atende | Job `banco` do CI roda `supabase/tests/cenario.py` no Postgres com PostGIS: cria a lista, recebe 3 propostas, escolhe, passa pelo conselho e aprova (`FALHAS: 0` no run 42205237078 da `main`, 06/11/2026). Job `front`: 86 testes (09/11/2026) | — |
 | 12 | Documentação honesta | Atende | README e este arquivo dizem o que está no ar e o que depende do backend; `docs/AMBIENTE-LOCAL.md` ensina a rodar com Supabase local | — |
 
-**Atendidos:** 1, 2, 4, 6, 8, 11 e 12. **Parciais:** 3, 7, 9 e 10. **Não atendido:** 5.
+**Atendidos:** 1, 2, 4, 6, 8, 10, 11 e 12. **Parciais:** 3, 7 e 9. **Não atendido:** 5.
 
-**Por que "Finalizado: sim":** tudo o que o código resolve está feito. O que falta depende do responsável, com o rótulo `depende-do-responsavel`: 3 e 9 (#2, backend), 5 (#17, conta de medição), 10 (#18, proteção da `main`) e 7, que precisa do merge na `main` para medir o site (#16) e do backend para medir as telas logadas (#5).
+**Por que "Finalizado: sim":** tudo o que o código resolve está feito. O que falta depende do responsável, com o rótulo `depende-do-responsavel`: 3 e 9 (#2, backend), 5 (#17, conta de medição) e 7, que precisa do merge na `main` para medir o site (#16) e do backend para medir as telas logadas (#5).
 
 **CI:** os jobs `front` e `banco` passam no PR #30 (feature → sprint). O agendamento `Manter Supabase ativo` passa a terminar com aviso sem as Variables (#19) depois do merge na `main`.
 
