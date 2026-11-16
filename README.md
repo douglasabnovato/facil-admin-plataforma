@@ -17,12 +17,15 @@ Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` respo
 - [docs/DEPLOY.md](docs/DEPLOY.md) com a Vercel e o Supabase; `.github/dependabot.yml` semanal; CI com Node 22.
 - LCP (#36): a `/demonstracao` entra no bundle principal, sem `lazy`, e o `supabase-js` espera a primeira pintura. Lighthouse móvel local: mediana 2,89 → 2,45 s no Lighthouse 12.8.2, a versão da medida no site (folga de 0,05 s). Teste `e2e/primeira-carga.spec.ts` contra a volta do problema. A medida no site fica para depois do merge do #40.
 
+**Alertas do Dependabot, 16/11/2026:** ligados pelo responsável; 18 abertos às 12:00. Os 3 de runtime (`react-router` 6, `zod` 3) seguem com a ADR 0001; os 15 de desenvolvimento só saem com o `vite` 6 e o `vitest` 4 (versão maior), na [#52](https://github.com/douglasabnovato/facil-admin-plataforma/issues/52).
+
 **Ciclos anteriores** (já na `main`, PR #27): teste no navegador com axe (PR #32), medição com GoatCounter pronta (PR #32), telas logadas com erro, vazio e axe (PR #30), `/demonstracao` mais leve (PR #30).
 
 **O que queremos fazer**
 
 - [#2](https://github.com/douglasabnovato/facil-admin-plataforma/issues/2) Restaurar o backend da plataforma publicada (responsável; passo a passo na issue).
-- [#34](https://github.com/douglasabnovato/facil-admin-plataforma/issues/34) Ligar os alertas do Dependabot (responsável).
+- [#52](https://github.com/douglasabnovato/facil-admin-plataforma/issues/52) Resolver os 15 alertas do Dependabot que restam (migrar `vite` e `vitest`, ou risco aceito em ADR pelo responsável).
+- [#34](https://github.com/douglasabnovato/facil-admin-plataforma/issues/34) Ligar os alertas do Dependabot (feito pelo responsável em 16/11/2026; evidência comentada na issue).
 - [#17](https://github.com/douglasabnovato/facil-admin-plataforma/issues/17) Criar a conta do GoatCounter e medir listas com 3 propostas (responsável).
 - [#36](https://github.com/douglasabnovato/facil-admin-plataforma/issues/36) LCP da `/demonstracao`: correção mesclada na sprint (PR #41); falta medir no site depois do merge do #40 (#16, responsável).
 - [#35](https://github.com/douglasabnovato/facil-admin-plataforma/issues/35) Migrar para React Router 7 e zod 4.
