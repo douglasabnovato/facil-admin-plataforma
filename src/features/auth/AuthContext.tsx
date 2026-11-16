@@ -13,12 +13,19 @@ const cliente = () => import("@/lib/supabase").then((m) => m.supabase);
 
 const PUBLICAS = ["/demonstracao", "/termos", "/privacidade"];
 
-/* Espera o navegador ficar ocioso nas páginas públicas; nas demais, segue na hora. */
+/*
+ * Nas páginas públicas, espera o load, a primeira pintura e o navegador ocioso; nas demais, segue na hora.
+ * Os dois requestAnimationFrame garantem que um quadro já foi pintado: sem eles, quando a primeira pintura
+ * vinha depois do load, o supabase-js (~59 kB gzip) disputava a rede com o h1 do LCP (#36).
+ * Em aba oculta o requestAnimationFrame não roda: a sessão só carrega quando a aba aparece (só nas páginas públicas).
+ */
 function quandoPuder(): Promise<void> {
   const caminho = window.location.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "");
   if (!PUBLICAS.some((p) => caminho.startsWith(p))) return Promise.resolve();
   return new Promise((ok) => {
-    const ocioso = () => ("requestIdleCallback" in window ? window.requestIdleCallback(() => ok(), { timeout: 3000 }) : setTimeout(ok, 1500));
+    const depoisDaPintura = (fn: () => void) => requestAnimationFrame(() => requestAnimationFrame(fn));
+    const ocioso = () =>
+      depoisDaPintura(() => ("requestIdleCallback" in window ? window.requestIdleCallback(() => ok(), { timeout: 3000 }) : setTimeout(ok, 1500)));
     if (document.readyState === "complete") ocioso();
     else window.addEventListener("load", ocioso, { once: true });
   });

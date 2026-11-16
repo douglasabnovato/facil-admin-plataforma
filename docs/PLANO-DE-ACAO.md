@@ -2,6 +2,31 @@
 
 > O estado de cada critério fica só em [`MVP.md`](MVP.md). Este arquivo guarda o plano de cada ciclo. O plano anterior está em [`PLANO-ESTRATEGICO.md`](PLANO-ESTRATEGICO.md).
 
+## Ciclo de 16/11/2026, parte 2: LCP da `/demonstracao` (#36)
+
+Executado em 16/11/2026, nas branches `feature/2026-11-16-lcp` → `developer/sprint-2026-11-19` (o PR #40 → `main` segue aberto). Nível: Produto (N3).
+
+### Produto
+- **Problema:** no site, a mediana do LCP da `/demonstracao` foi 2,79 s (meta: 2,5 s). Quem chega pelo celular vê só "Carregando…" até o título aparecer.
+- **Hipótese e meta:** se o `h1` pintar com o JS que o `index.html` já pede, a mediana local fica bem abaixo de 2,5 s; saberemos quando o Lighthouse móvel no site, depois do merge do #40, der mediana até 2,5 s em 3 execuções.
+- **O que a pesquisa trouxe:**
+  - O LCP se divide em TTFB, atraso de carga, tempo de carga e atraso de renderização; quando o elemento é texto, o atraso de renderização vem do JS que precisa rodar antes de ele existir ([web.dev, Optimize Largest Contentful Paint](https://web.dev/articles/optimize-lcp)). O JSON do Lighthouse mostrou exatamente isso: o `h1` é o elemento do LCP, e o atraso é de renderização.
+  - O `React.lazy` só pede o código do componente na primeira vez que ele vai ser renderizado ([React, `lazy`](https://react.dev/reference/react/lazy)). Para a página de entrada, isso cria uma cascata: HTML → JS principal → chunk da página.
+  - O Vite gera `modulepreload` só para os chunks importados de forma estática pela entrada ([Vite, Features: preload directives](https://vite.dev/guide/features#preload-directives-generation)). Um chunk de `import()` não entra no `index.html`.
+- **Decisão:** importar a `Demonstracao` sem `lazy`. Ela tem ~5 kB (1,8 kB gzip), só dados fictícios e não importa o Supabase. O `modulepreload` do chunk serviria também, mas o `index.html` é o mesmo para todas as rotas, e o login e o painel baixariam a página à toa.
+- **Segunda causa, achada na medição:** com a página no bundle de entrada, a primeira pintura passou a vir depois do `load`. O import do `supabase-js`, que esperava só o `load` e o navegador ocioso, começava antes dela, e o Lighthouse 12.8.2 o contava no LCP simulado (mediana ficou em 2,94 s). Agora o import espera também dois `requestAnimationFrame`, isto é, um quadro já pintado.
+- **Fora do escopo:** telas logadas (#5, dependem de #2), layout e visual.
+
+### Engenharia
+- **Arquitetura:** a `Demonstracao` passa a fazer parte do bundle de entrada; as demais páginas seguem sob demanda; o `supabase-js` segue fora da primeira carga (o import dinâmico do `AuthContext` não mudou).
+- **Riscos:** o bundle de entrada cresce ~5 kB (saída do `npm run build`, 16/11/2026: `assets/index-*.js` 155,68 → 161,02 kB; gzip 50,72 → 52,20 kB) para todas as rotas.
+- **Qualidade:** teste Playwright novo (`e2e/primeira-carga.spec.ts`) corta todo JS que não está no `index.html` e exige o `h1` visível; com o `lazy` de volta (`git stash` do `App.tsx` e `npx playwright test e2e/primeira-carga.spec.ts --project=desktop`, 16/11/2026), ele falha: `1 failed`, o `h1` não aparece em 10 s. Ele não protege o segundo ajuste (o `supabase-js` depois da pintura); isso virou issue. Lighthouse móvel local num servidor com gzip, 3 execuções antes e depois, nas versões 12.8.2 (a da medição no site) e 13.6.0. Os números estão no `MVP.md`, critério 7.
+- **Definição de pronto:** CI verde no PR para a sprint, revisão independente sem erro aberto, `MVP.md` com a medida local e o critério 7 ainda "Não atende" até a medida no site.
+
+### Plano de ação
+- **Executa:** a importação direta, o `supabase-js` depois da primeira pintura, o teste de regressão, a medida local e a atualização do `MVP.md` e do README.
+- **Fica para depois do merge do #40:** medir no site (3 execuções, mediana, TBT e elemento) e levar o critério 7 a "Atende" (#16, do responsável).
+
 ## Ciclo de 16/11/2026
 
 Executado em 16/11/2026, nas branches `feature/2026-11-16` → `developer/sprint-2026-11-19` (criada a partir da `main`, porque o PR #27 foi mesclado em 16/11). O merge na `main` fica com o responsável. Nível: Produto (N3). O Supabase publicado segue fora do ar (#2), então o ciclo cuida do que o código e o site público resolvem.
