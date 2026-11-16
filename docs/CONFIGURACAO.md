@@ -1,5 +1,7 @@
 # Configurações e ferramentas — o que você precisa fazer
 
+> **Atualização de 16/11/2026:** o front saiu do GitHub Pages e está na Vercel (https://facil-admin-plataforma.vercel.app). Os endereços `douglasabnovato.github.io/...` abaixo são da configuração antiga. O passo a passo atual de publicação está em [`DEPLOY.md`](DEPLOY.md).
+
 > Nomes padrão: **faciladmin**. Se precisar de um segundo nome (outro projeto ou serviço), use **faciladmin-atendimento**.
 > Os valores `douglasabnovato` abaixo seguem o dono dos repositórios atuais; troque se publicar em outra conta.
 
