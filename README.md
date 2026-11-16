@@ -15,6 +15,7 @@ Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` respo
 - Playwright: o projeto "escuro" repetia o claro (o app não tem tema escuro) e virou "celular" (375 px), com teste de rolagem horizontal em 375 e 320 px.
 - Lighthouse móvel no site, com o build da `main`: 7 execuções na `/demonstracao`, mediana 2,79 s.
 - [docs/DEPLOY.md](docs/DEPLOY.md) com a Vercel e o Supabase; `.github/dependabot.yml` semanal; CI com Node 22.
+- LCP (#36): a `/demonstracao` entra no bundle principal, sem `lazy`, e o `supabase-js` espera a primeira pintura. Lighthouse móvel local: mediana 2,89 → 2,45 s (12.8.2) e 2,94 → 0,78 s (13.6.0). Teste `e2e/primeira-carga.spec.ts` contra a volta do problema. A medida no site fica para depois do merge do #40.
 
 **Ciclos anteriores** (já na `main`, PR #27): teste no navegador com axe (PR #32), medição com GoatCounter pronta (PR #32), telas logadas com erro, vazio e axe (PR #30), `/demonstracao` mais leve (PR #30).
 
@@ -23,7 +24,7 @@ Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` respo
 - [#2](https://github.com/douglasabnovato/facil-admin-plataforma/issues/2) Restaurar o backend da plataforma publicada (responsável; passo a passo na issue).
 - [#34](https://github.com/douglasabnovato/facil-admin-plataforma/issues/34) Ligar os alertas do Dependabot (responsável).
 - [#17](https://github.com/douglasabnovato/facil-admin-plataforma/issues/17) Criar a conta do GoatCounter e medir listas com 3 propostas (responsável).
-- [#36](https://github.com/douglasabnovato/facil-admin-plataforma/issues/36) Pintar o `h1` da `/demonstracao` sem esperar o chunk sob demanda (LCP no site); depois, medir (#16, responsável).
+- [#36](https://github.com/douglasabnovato/facil-admin-plataforma/issues/36) LCP da `/demonstracao`: correção na sprint; falta medir no site depois do merge do #40 (#16, responsável).
 - [#35](https://github.com/douglasabnovato/facil-admin-plataforma/issues/35) Migrar para React Router 7 e zod 4.
 - [#38](https://github.com/douglasabnovato/facil-admin-plataforma/issues/38) Testar o cadastro no navegador com o backend simulado.
 - [#28](https://github.com/douglasabnovato/facil-admin-plataforma/issues/28), [#29](https://github.com/douglasabnovato/facil-admin-plataforma/issues/29) e [#33](https://github.com/douglasabnovato/facil-admin-plataforma/issues/33) Contraste no navegador, telas de detalhe e fluxo real com Supabase local no CI.
