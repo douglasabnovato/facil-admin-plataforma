@@ -15,6 +15,7 @@ import { useAuth } from "./contexto";
 import { LayoutAuth } from "./LayoutAuth";
 import { urlDoApp } from "@/app/urls";
 import { mensagemAuth } from "./mensagens";
+import { destinoSeguro } from "@/lib/destino";
 
 const esquema = z.object({
   email: z.string().trim().email("Informe um e-mail válido"),
@@ -29,7 +30,7 @@ export default function Entrar() {
   const local = useLocation();
   const [enviandoLink, setEnviandoLink] = useState(false);
   const { register, handleSubmit, getValues, formState } = useForm<Dados>({ resolver: zodResolver(esquema) });
-  const destino = (local.state as { de?: string } | null)?.de ?? "/";
+  const destino = destinoSeguro((local.state as { de?: unknown } | null)?.de);
 
   if (usuario) return <Navigate to={destino} replace />;
 

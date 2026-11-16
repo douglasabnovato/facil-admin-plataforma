@@ -3,7 +3,7 @@
  */
 import { describe, expect, it } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { AuthContexto, type AuthValor } from "@/features/auth/contexto";
 import Cadastro from "@/features/auth/Cadastro";
 import Entrar from "@/features/auth/Entrar";
@@ -28,6 +28,27 @@ describe("telas públicas", () => {
     expect(screen.getByLabelText("E-mail")).toBeInTheDocument();
     expect(screen.getByLabelText("Senha")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Cadastre-se" })).toBeInTheDocument();
+  });
+  it("login com sessão volta só para caminho do app (destino externo vira o painel)", () => {
+    const logado = { ...semLogin, usuario: { id: "u1" } as AuthValor["usuario"] };
+    const montarCom = (de: string) =>
+      render(
+        <AuthContexto.Provider value={logado}>
+          <MemoryRouter initialEntries={[{ pathname: "/entrar", state: { de } }]}>
+            <Routes>
+              <Route path="/entrar" element={<Entrar />} />
+              <Route path="/listas" element={<p>tela de listas</p>} />
+              <Route path="/" element={<p>tela do painel</p>} />
+              <Route path="*" element={<p>fora do app</p>} />
+            </Routes>
+          </MemoryRouter>
+        </AuthContexto.Provider>,
+      );
+    const { unmount } = montarCom("/listas");
+    expect(screen.getByText("tela de listas")).toBeInTheDocument();
+    unmount();
+    montarCom("/\\evil.example");
+    expect(screen.getByText("tela do painel")).toBeInTheDocument();
   });
   it("cadastro abre com o tipo vindo da URL", () => {
     montar(<Cadastro />, "/cadastro?tipo=fornecedor");
