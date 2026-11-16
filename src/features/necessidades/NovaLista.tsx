@@ -90,7 +90,9 @@ export default function NovaLista() {
     setF((v) => ({ ...v, itens: v.itens.map((it, k) => (k === i ? { ...it, [campo]: valor } : it)) }));
 
   if (conds.isLoading || cats.isLoading || existente.isLoading) return <Carregando />;
-  if (existente.error) return <ErroCarga erro={existente.error} />;
+  if (existente.error) return <ErroCarga erro={existente.error} tentar={existente.refetch} />;
+  if (conds.error) return <ErroCarga erro={conds.error} tentar={conds.refetch} />;
+  if (cats.error) return <ErroCarga erro={cats.error} tentar={cats.refetch} />;
 
   return (
     <>
@@ -218,7 +220,7 @@ export default function NovaLista() {
               )}
               {podePublicar ? (
                 <>
-                  <Button className="w-full" onClick={() => enviar(true)} disabled={salvar.isPending}>Salvar e publicar</Button>
+                  <Button className="w-full" onClick={() => enviar(true)} disabled={salvar.isPending} data-evento="lista-publicar">Salvar e publicar</Button>
                   <Button className="w-full" variant="outline" onClick={() => enviar(false)} disabled={salvar.isPending}>Salvar rascunho</Button>
                 </>
               ) : (

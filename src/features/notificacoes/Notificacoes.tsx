@@ -3,38 +3,25 @@
  */
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { Bell, CheckCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CabecalhoPagina, Carregando, ErroCarga, EstadoVazio } from "@/components/Comuns";
 import { cn } from "@/lib/utils";
 import { tempoRelativo } from "@/lib/formatos";
-import { supabase } from "@/lib/supabase";
 import type { Notificacao } from "@/lib/tipos";
-
-/* Últimas 100 notificações do usuário. */
-async function listar(): Promise<Notificacao[]> {
-  const { data, error } = await supabase.from("notificacoes").select("*").order("created_at", { ascending: false }).limit(100);
-  if (error) throw new Error(error.message);
-  return (data ?? []) as Notificacao[];
-}
-
-/* Marca como lidas (uma ou todas). */
-async function marcarLidas(id?: string): Promise<void> {
-  let q = supabase.from("notificacoes").update({ lida: true }).eq("lida", false);
-  if (id) q = q.eq("id", id);
-  const { error } = await q;
-  if (error) throw new Error(error.message);
-}
+import { listarNotificacoes, marcarLidas } from "./api";
 
 /* Página de notificações. */
 export default function Notificacoes() {
   const navegar = useNavigate();
   const cliente = useQueryClient();
-  const q = useQuery({ queryKey: ["notificacoes"], queryFn: listar });
+  const q = useQuery({ queryKey: ["notificacoes"], queryFn: listarNotificacoes });
   const lidas = useMutation({
     mutationFn: marcarLidas,
     onSuccess: () => cliente.invalidateQueries({ queryKey: ["notificacoes"] }),
+    onError: (e: Error) => toast.error(`Não foi possível marcar como lida: ${e.message}`),
   });
   const abrir = (n: Notificacao) => {
     if (!n.lida) lidas.mutate(n.id);

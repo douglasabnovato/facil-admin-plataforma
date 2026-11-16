@@ -1,29 +1,36 @@
 # FacilAdmin Plataforma
 
-> **Estado em 06/11/2026:** `/demonstracao` funciona sem login e sem banco, com dados fictícios. O restante depende do backend, pausado no Supabase (issue #2). Critérios em [docs/MVP.md](docs/MVP.md).
+> **Estado em 09/11/2026:** `/demonstracao` funciona sem login e sem banco, com dados fictícios. O restante depende do backend, pausado no Supabase (issue #2). Critérios em [docs/MVP.md](docs/MVP.md).
 
-## Estado e próximos passos (ciclo de 03/11/2026)
+## Estado e próximos passos (ciclo de 10/11/2026)
 
-Site publicado: https://facil-admin-plataforma.vercel.app (HTTP 200 em 06/11/2026). Login e cadastro não funcionam enquanto o backend estiver pausado (#2); use a [demonstração](https://facil-admin-plataforma.vercel.app/demonstracao).
+Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` responde em 09/11/2026). Login e cadastro não funcionam enquanto o backend estiver pausado (#2); use a [demonstração](https://facil-admin-plataforma.vercel.app/demonstracao). Critérios: 8 de 12 atendidos, **Finalizado: sim** (o que falta depende do responsável), em [docs/MVP.md](docs/MVP.md). A `main` está protegida desde 10/11/2026 (ruleset `principal-protegida`).
 
-**O que foi feito**
+**O que foi feito em 10/11/2026** (entra no PR #27 para a `main`)
 
-- Demonstração sem backend, com a regra de aprovação do conselho, e rotas diretas corrigidas na Vercel (PR #11, #12).
-- LCP e teclado do login medidos e registrados (PR #8, #9).
-- Critérios do MVP revistos com as medições do site publicado (PR #13, #14).
-- Ordenação das propostas por aderência, valor ou prazo, e aviso do mínimo de 3 propostas por escrito, com testes (PR #20).
-- Plano do ciclo com pesquisa e fontes em `docs/PLANO-DE-ACAO.md` (PR #20).
-- LCP móvel da `/demonstracao` medido depois do merge: mediana de 2,36 s (PR #22).
+- Teste de ponta a ponta no navegador (Playwright + axe, claro e escuro) no job `front`: demonstração, teclado e login com o backend fora do ar (`npm run test:e2e`).
+- Medição de uso pronta: GoatCounter sem cookie, só em produção, com os eventos de escolher proposta e publicar lista. Falta a conta (#17).
+
+**Ciclo de 09/11** (PR #30)
+
+- Telas logadas com erro, vazio e carregamento testados com a API simulada (`src/test/telas-logadas.test.tsx`). Os testes acharam e corrigiram: "Tentar de novo" de Oportunidades refazendo a consulta errada, ações que falhavam sem aviso e consultas secundárias que viravam formulário ou fila vazia.
+- Axe e teclado nas telas logadas (`src/test/acessibilidade.test.tsx`): zero violações; os diálogos de Condomínios passaram a devolver o foco ao botão. Contraste dos tokens calculado (`src/test/contraste.test.ts`); o âmbar dos selos foi escurecido para passar de 4,5:1.
+- `/demonstracao` mais leve: sem `supabase-js` nem Radix na primeira carga e fonte sem bloquear a pintura. LCP local de 2,98 s para 2,42 s (mediana); a medição no site depende do merge na `main` (#16).
+- 86 testes no job `front` (eram 30).
+
+**Antes (ciclo de 07/11):** falha dos condomínios tratada na tela de necessidades; agendamento do Supabase com aviso sem Variables (#19).
 
 **O que queremos fazer**
 
-- [#2](https://github.com/douglasabnovato/facil-admin-plataforma/issues/2) Restaurar o backend da plataforma publicada (responsável).
-- [#5](https://github.com/douglasabnovato/facil-admin-plataforma/issues/5) Medir LCP e navegação por teclado nas telas logadas.
-- [#15](https://github.com/douglasabnovato/facil-admin-plataforma/issues/15) Testar o fluxo de necessidades contra o banco do CI.
-- [#16](https://github.com/douglasabnovato/facil-admin-plataforma/issues/16) Reduzir o LCP da `/demonstracao` para até 2,5 s.
-- [#17](https://github.com/douglasabnovato/facil-admin-plataforma/issues/17) Medir listas com 3 propostas e o tempo até a escolha (responsável).
-- [#18](https://github.com/douglasabnovato/facil-admin-plataforma/issues/18) Proteger a `main` com PR e CI obrigatórios (responsável).
-- [#19](https://github.com/douglasabnovato/facil-admin-plataforma/issues/19) Agendamento do Supabase: avisar em vez de falhar sem Variables.
+- [#2](https://github.com/douglasabnovato/facil-admin-plataforma/issues/2) Restaurar o backend da plataforma publicada (responsável; passo a passo na issue).
+- [#5](https://github.com/douglasabnovato/facil-admin-plataforma/issues/5) Medir o LCP das telas logadas (responsável, depende de #2).
+- [#16](https://github.com/douglasabnovato/facil-admin-plataforma/issues/16) Medir o LCP da `/demonstracao` no site depois do merge na `main` (responsável).
+- [#17](https://github.com/douglasabnovato/facil-admin-plataforma/issues/17) Criar a conta do GoatCounter `douglasabnovato` e medir listas com 3 propostas (responsável; o código já está no site).
+- [#18](https://github.com/douglasabnovato/facil-admin-plataforma/issues/18) Proteger a `main`: feito em 10/11/2026; a issue fecha no merge da `main`.
+- [#19](https://github.com/douglasabnovato/facil-admin-plataforma/issues/19) Conferir o aviso do agendamento depois do merge na `main`.
+- [#24](https://github.com/douglasabnovato/facil-admin-plataforma/issues/24) e [#25](https://github.com/douglasabnovato/facil-admin-plataforma/issues/25) Feitas no PR #30; fecham depois do merge na `main`.
+- [#28](https://github.com/douglasabnovato/facil-admin-plataforma/issues/28) Conferir o contraste das telas logadas no navegador.
+- [#29](https://github.com/douglasabnovato/facil-admin-plataforma/issues/29) Testar erro, vazio e axe nas telas logadas de detalhe.
 
 **Onde está a documentação**
 
@@ -258,6 +265,7 @@ http://127.0.0.1:5173
 | npm run build | Valida projeto e gera produção |
 | npm run preview | Visualiza build local |
 | npm test | Executa testes |
+| npm run test:e2e | Ponta a ponta no navegador (Playwright; antes, `npx playwright install chromium`) |
 | npm run lint | Analisa padrões de código |
 | npm run typecheck | Validação TypeScript |
 

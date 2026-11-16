@@ -1,6 +1,7 @@
 /*
  * App.tsx — provedores (React Query, Auth, tooltips, toasts) e rotas. Páginas carregadas sob demanda.
  * O basename segue o caminho publicado (VITE_BASE), para funcionar no GitHub Pages.
+ * O Layout logado também é carregado sob demanda: a primeira carga da /demonstracao não leva o supabase-js nem os menus do Radix.
  */
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -9,11 +10,11 @@ import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Carregando } from "@/components/Comuns";
 import { AuthProvider } from "@/features/auth/AuthContext";
-import { configurado } from "@/lib/supabase";
-import Layout from "./Layout";
+import { configurado } from "@/lib/config";
 import { RotaProtegida } from "./RotaProtegida";
 import { NaoEncontrada, Privacidade, Termos } from "./Paginas";
 
+const Layout = lazy(() => import("./Layout"));
 const Entrar = lazy(() => import("@/features/auth/Entrar"));
 const Cadastro = lazy(() => import("@/features/auth/Cadastro"));
 const NovaSenha = lazy(() => import("@/features/auth/NovaSenha"));

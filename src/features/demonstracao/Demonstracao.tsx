@@ -100,6 +100,7 @@ export default function Demonstracao() {
                   variant={escolhida?.id === p.id ? "default" : "outline"}
                   aria-pressed={escolhida?.id === p.id}
                   onClick={() => setEscolhida(p)}
+                  data-evento="demonstracao-escolher"
                 >
                   Escolher {p.fornecedor}
                 </Button>

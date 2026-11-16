@@ -2,7 +2,7 @@
  * Condominios.tsx — condomínios do usuário, cadastro de condomínio (síndico ou administradora)
  * e pedido de entrada por código de convite (condôminos e conselheiros).
  */
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -10,7 +10,7 @@ import { Building2, KeyRound, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,8 +21,16 @@ import { ENDERECO_VAZIO, enderecoValido, type ValorEndereco } from "@/lib/endere
 import { ROTULO_PAPEL, formatarReais } from "@/lib/formatos";
 import { criarAdministradora, criarCondominio, entrarCondominio, meusCondominios, minhasAdministradoras } from "./api";
 
+/* Props dos diálogos: o gatilho fica dentro do Dialog para o foco voltar a ele ao fechar. */
+interface PropsDialogo {
+  aberto: boolean;
+  abrir: () => void;
+  fechar: () => void;
+  gatilho: ReactNode;
+}
+
 /* Diálogo de cadastro de condomínio. */
-function NovoCondominio({ aberto, fechar }: { aberto: boolean; fechar: () => void }) {
+function NovoCondominio({ aberto, abrir, fechar, gatilho }: PropsDialogo) {
   const cliente = useQueryClient();
   const navegar = useNavigate();
   const [nome, setNome] = useState("");
@@ -53,7 +61,8 @@ function NovoCondominio({ aberto, fechar }: { aberto: boolean; fechar: () => voi
   const podeSalvar = nome.trim().length >= 3 && enderecoValido(endereco) && (!comoAdm || admId !== "nova" || admNome.trim().length >= 3);
 
   return (
-    <Dialog open={aberto} onOpenChange={(v) => !v && fechar()}>
+    <Dialog open={aberto} onOpenChange={(v) => (v ? abrir() : fechar())}>
+      <DialogTrigger asChild>{gatilho}</DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Cadastrar condomínio</DialogTitle>
@@ -91,9 +100,9 @@ function NovoCondominio({ aberto, fechar }: { aberto: boolean; fechar: () => voi
             {comoAdm && (
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label>Administradora</Label>
+                  <Label htmlFor="c-adm-id">Administradora</Label>
                   <Select value={admId} onValueChange={setAdmId}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger id="c-adm-id"><SelectValue /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="nova">Nova administradora…</SelectItem>
                       {adms.map((a) => <SelectItem key={a.id} value={a.id}>{a.nome}</SelectItem>)}
@@ -122,7 +131,7 @@ function NovoCondominio({ aberto, fechar }: { aberto: boolean; fechar: () => voi
 }
 
 /* Diálogo de entrada por código de convite. */
-function EntrarPorCodigo({ aberto, fechar }: { aberto: boolean; fechar: () => void }) {
+function EntrarPorCodigo({ aberto, abrir, fechar, gatilho }: PropsDialogo) {
   const cliente = useQueryClient();
   const [codigo, setCodigo] = useState("");
   const [unidade, setUnidade] = useState("");
@@ -138,7 +147,8 @@ function EntrarPorCodigo({ aberto, fechar }: { aberto: boolean; fechar: () => vo
     onError: (e: Error) => toast.error(e.message),
   });
   return (
-    <Dialog open={aberto} onOpenChange={(v) => !v && fechar()}>
+    <Dialog open={aberto} onOpenChange={(v) => (v ? abrir() : fechar())}>
+      <DialogTrigger asChild>{gatilho}</DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Entrar em um condomínio</DialogTitle>
@@ -176,8 +186,14 @@ export default function Condominios() {
         descricao="Onde você atua como síndico, administradora, conselheiro ou morador."
         acoes={
           <>
-            <Button variant="outline" onClick={() => setCodigo(true)}><KeyRound className="mr-2 h-4 w-4" aria-hidden="true" />Tenho um código</Button>
-            <Button onClick={() => setNovo(true)}><Plus className="mr-2 h-4 w-4" aria-hidden="true" />Cadastrar condomínio</Button>
+            <EntrarPorCodigo
+              aberto={codigo} abrir={() => setCodigo(true)} fechar={() => setCodigo(false)}
+              gatilho={<Button variant="outline"><KeyRound className="mr-2 h-4 w-4" aria-hidden="true" />Tenho um código</Button>}
+            />
+            <NovoCondominio
+              aberto={novo} abrir={() => setNovo(true)} fechar={() => setNovo(false)}
+              gatilho={<Button><Plus className="mr-2 h-4 w-4" aria-hidden="true" />Cadastrar condomínio</Button>}
+            />
           </>
         }
       />
@@ -223,8 +239,6 @@ export default function Condominios() {
           ))}
         </ul>
       )}
-      <NovoCondominio aberto={novo} fechar={() => setNovo(false)} />
-      <EntrarPorCodigo aberto={codigo} fechar={() => setCodigo(false)} />
     </>
   );
 }
