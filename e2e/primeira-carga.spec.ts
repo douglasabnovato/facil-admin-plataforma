@@ -29,7 +29,7 @@ test("o h1 da demonstração pinta só com o JS do index.html, sem o supabase-js
 
   await page.goto("/demonstracao");
   await expect(page.getByRole("heading", { level: 1, name: "Compare propostas e escolha sem favorecimento" })).toBeVisible({ timeout: 10_000 });
-  /* Nenhum chunk com o nome da página foi pedido: ela veio no bundle de entrada. */
+  /* Conferência extra, dependente do nome do chunk; quem guarda de verdade é o toBeVisible acima. */
   expect(cortados.filter((c) => /Demonstracao/.test(c))).toEqual([]);
 });
 

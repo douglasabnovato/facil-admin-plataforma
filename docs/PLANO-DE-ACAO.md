@@ -19,8 +19,8 @@ Executado em 16/11/2026, nas branches `feature/2026-11-16-lcp` → `developer/sp
 
 ### Engenharia
 - **Arquitetura:** a `Demonstracao` passa a fazer parte do bundle de entrada; as demais páginas seguem sob demanda; o `supabase-js` segue fora da primeira carga (o import dinâmico do `AuthContext` não mudou).
-- **Riscos:** o bundle de entrada cresce ~5 kB (155,7 → 161,0 kB; gzip 50,7 → 52,2 kB) para todas as rotas.
-- **Qualidade:** teste Playwright novo (`e2e/primeira-carga.spec.ts`) corta todo JS que não está no `index.html` e exige o `h1` visível; com o `lazy` de volta, ele falha (conferido localmente). Lighthouse móvel local num servidor com gzip, 3 execuções antes e depois, nas versões 12.8.2 (a da medição no site) e 13.6.0. Os números estão no `MVP.md`, critério 7.
+- **Riscos:** o bundle de entrada cresce ~5 kB (saída do `npm run build`, 16/11/2026: `assets/index-*.js` 155,68 → 161,02 kB; gzip 50,72 → 52,20 kB) para todas as rotas.
+- **Qualidade:** teste Playwright novo (`e2e/primeira-carga.spec.ts`) corta todo JS que não está no `index.html` e exige o `h1` visível; com o `lazy` de volta (`git stash` do `App.tsx` e `npx playwright test e2e/primeira-carga.spec.ts --project=desktop`, 16/11/2026), ele falha: `1 failed`, o `h1` não aparece em 10 s. Ele não protege o segundo ajuste (o `supabase-js` depois da pintura); isso virou issue. Lighthouse móvel local num servidor com gzip, 3 execuções antes e depois, nas versões 12.8.2 (a da medição no site) e 13.6.0. Os números estão no `MVP.md`, critério 7.
 - **Definição de pronto:** CI verde no PR para a sprint, revisão independente sem erro aberto, `MVP.md` com a medida local e o critério 7 ainda "Não atende" até a medida no site.
 
 ### Plano de ação

@@ -17,6 +17,7 @@ const PUBLICAS = ["/demonstracao", "/termos", "/privacidade"];
  * Nas páginas públicas, espera o load, a primeira pintura e o navegador ocioso; nas demais, segue na hora.
  * Os dois requestAnimationFrame garantem que um quadro já foi pintado: sem eles, quando a primeira pintura
  * vinha depois do load, o supabase-js (~59 kB gzip) disputava a rede com o h1 do LCP (#36).
+ * Em aba oculta o requestAnimationFrame não roda: a sessão só carrega quando a aba aparece (só nas páginas públicas).
  */
 function quandoPuder(): Promise<void> {
   const caminho = window.location.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "");
