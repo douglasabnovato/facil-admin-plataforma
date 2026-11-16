@@ -6,7 +6,7 @@
 > Os valores `douglasabnovato` abaixo seguem o dono dos repositórios atuais; troque se publicar em outra conta.
 
 ## 1. Ferramentas no computador
-- [ ] Node.js 20 LTS — `node --version`
+- [ ] Node.js 22 LTS ou mais novo — `node --version` (o Node 20 saiu de suporte em 30/04/2026; o CI usa o 22)
 - [ ] Git + Git Bash
 - [ ] VS Code (o repositório sugere ESLint, Tailwind CSS IntelliSense e Prettier ao abrir)
 - [ ] (Opcional) Docker Desktop, para o Supabase local (ambiente de desenvolvimento sem gastar projeto na nuvem)

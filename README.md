@@ -217,7 +217,7 @@ facil-admin-plataforma
 
 ## Requisitos
 
-- Node.js
+- Node.js 22 ou mais novo (o CI usa o 22)
 - npm
 - Conta Supabase configurada
 
