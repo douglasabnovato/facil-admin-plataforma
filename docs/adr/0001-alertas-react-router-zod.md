@@ -1,6 +1,6 @@
 # ADR 0001: alertas do react-router 6 e do zod 3 até a migração
 
-**Data:** 16/11/2026. **Situação:** aceita pelo agente do ciclo, sob o mandato do responsável; revisão do responsável no PR sprint → `main`.
+**Data:** 16/11/2026. **Situação:** Substituída pela [ADR 0002](0002-corrigir-alertas-dependabot.md) em 16/11/2026. Era aceita pelo agente do ciclo e não foi confirmada pelo responsável. Pela regra dele de 16/11/2026, o que roda no site é corrigido, não aceito: o `react-router` e o `zod` subiram para versões corrigidas. O texto abaixo fica como registro.
 
 ## Contexto
 

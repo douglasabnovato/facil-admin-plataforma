@@ -166,7 +166,7 @@ Os pesos ficam em `config_match` e podem ser ajustados sem deploy. Cada match gr
 - **ADR-01:** mesma stack da Volta Express, para reaproveitar conhecimento, padrões de RLS, match com PostGIS e documentação.
 - **ADR-02:** match no banco (PostGIS + score configurável), nunca no navegador.
 - **ADR-03:** cotação estruturada por item em vez de só contato direto, porque condomínios precisam comparar e prestar contas.
-- **ADR-04:** GitHub Pages para o front (custo zero); Supabase para dados e regras. *Revista na prática: o front está na Vercel, no plano gratuito ([`DEPLOY.md`](DEPLOY.md)).* Riscos de dependências decididos em [`adr/0001-alertas-react-router-zod.md`](adr/0001-alertas-react-router-zod.md).
+- **ADR-04:** GitHub Pages para o front (custo zero); Supabase para dados e regras. *Revista na prática: o front está na Vercel, no plano gratuito ([`DEPLOY.md`](DEPLOY.md)).* Alertas de dependências corrigidos por atualização em [`adr/0002-corrigir-alertas-dependabot.md`](adr/0002-corrigir-alertas-dependabot.md), que substitui a 0001.
 - **ADR-05 (revisada):** geocodificação gratuita **no navegador** (BrasilAPI/ViaCEP + Nominatim) em vez de uma Edge Function. O volume é baixo (só no cadastro de condomínio e fornecedor) e isso elimina uma peça para manter. Sem coordenadas, o match usa a cidade.
 - **ADR-06:** cliente Supabase sem tipos gerados. Os formatos ficam em `src/lib/tipos.ts`. Quando o esquema estabilizar, gerar com `npx supabase gen types typescript --linked > src/lib/database.types.ts`.
 - **ADR-07:** notificações in-app no MVP. E-mail (Resend) na fase 2, exigindo domínio verificado.
