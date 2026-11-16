@@ -24,7 +24,7 @@ Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` respo
 - [#2](https://github.com/douglasabnovato/facil-admin-plataforma/issues/2) Restaurar o backend da plataforma publicada (responsável; passo a passo na issue).
 - [#34](https://github.com/douglasabnovato/facil-admin-plataforma/issues/34) Ligar os alertas do Dependabot (responsável).
 - [#17](https://github.com/douglasabnovato/facil-admin-plataforma/issues/17) Criar a conta do GoatCounter e medir listas com 3 propostas (responsável).
-- [#36](https://github.com/douglasabnovato/facil-admin-plataforma/issues/36) LCP da `/demonstracao`: correção no PR #41; falta medir no site depois do merge do #40 (#16, responsável).
+- [#36](https://github.com/douglasabnovato/facil-admin-plataforma/issues/36) LCP da `/demonstracao`: correção mesclada na sprint (PR #41); falta medir no site depois do merge do #40 (#16, responsável).
 - [#35](https://github.com/douglasabnovato/facil-admin-plataforma/issues/35) Migrar para React Router 7 e zod 4.
 - [#38](https://github.com/douglasabnovato/facil-admin-plataforma/issues/38) Testar o cadastro no navegador com o backend simulado.
 - [#28](https://github.com/douglasabnovato/facil-admin-plataforma/issues/28), [#29](https://github.com/douglasabnovato/facil-admin-plataforma/issues/29) e [#33](https://github.com/douglasabnovato/facil-admin-plataforma/issues/33) Contraste no navegador, telas de detalhe e fluxo real com Supabase local no CI.
