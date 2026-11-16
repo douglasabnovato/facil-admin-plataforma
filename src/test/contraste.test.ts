@@ -1,6 +1,8 @@
+/// <reference types="node" />
 /*
  * contraste.test.ts — contraste (WCAG 2.1 AA, 4,5:1 para texto) dos pares de cores que as telas logadas usam,
  * calculado a partir dos tokens de src/index.css. Cobre o que o axe não mede no jsdom.
+ * A referência aos tipos do Node vem do vitest 4, que deixou de trazê-los junto com `vitest/globals`.
  */
 import { readFileSync } from "node:fs";
 import path from "node:path";
