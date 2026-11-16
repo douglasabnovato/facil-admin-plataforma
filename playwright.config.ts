@@ -1,6 +1,7 @@
 /*
  * playwright.config.ts — ponta a ponta no navegador (critério 3): sobe o build de produção com `vite preview`
- * numa porta própria e roda claro e escuro. O Supabase aponta para um endereço que não existe e os testes
+ * numa porta própria e roda em desktop e celular (375 px). O app não tem tema escuro próprio (sem `.dark` nem
+ * `prefers-color-scheme` no CSS), por isso não há projeto "escuro": ele repetiria a tela clara. O Supabase aponta para um endereço que não existe e os testes
  * cortam as chamadas a ele: a demonstração não usa o banco, e o login mostra a falha de rede.
  */
 import { defineConfig, devices } from "@playwright/test";
@@ -14,8 +15,11 @@ export default defineConfig({
   reporter: process.env.CI ? [["list"], ["html", { open: "never" }]] : "list",
   use: { baseURL: `http://127.0.0.1:${PORTA}`, trace: "retain-on-failure", reducedMotion: "reduce" },
   projects: [
-    { name: "claro", use: { ...devices["Desktop Chrome"], colorScheme: "light" } },
-    { name: "escuro", use: { ...devices["Desktop Chrome"], colorScheme: "dark" } },
+    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
+    {
+      name: "celular",
+      use: { ...devices["Desktop Chrome"], viewport: { width: 375, height: 812 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
+    },
   ],
   webServer: {
     command: `npm run build && npx vite preview --host 127.0.0.1 --port ${PORTA} --strictPort`,
