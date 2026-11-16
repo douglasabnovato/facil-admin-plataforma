@@ -1,7 +1,8 @@
 /*
  * fluxo.spec.ts — fluxo principal no navegador: na demonstração, comparar 3 propostas, ordenar e escolher,
  * com a regra de aprovação (até R$ 5.000 a síndica aprova; acima, o conselho vota). No login, um envio real
- * pelo navegador com o backend fora do ar mostra a mensagem de falha. axe sem violações em claro e escuro.
+ * pelo navegador com o backend fora do ar mostra a mensagem de falha. axe sem violações em desktop e celular (375 px).
+ * Sem rolagem horizontal em 375 e 320 px (WCAG 1.4.10, Reflow).
  */
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
@@ -56,5 +57,21 @@ test("login com o backend fora do ar mostra a falha e o caminho da demonstraçã
   const resultado = await new AxeBuilder({ page }).analyze();
   expect(resultado.violations).toEqual([]);
 });
+
+/* Largura da página maior que a janela = rolagem horizontal. */
+async function larguraExcedente(page: import("@playwright/test").Page) {
+  return page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+}
+
+for (const rota of ["/demonstracao", "/entrar", "/cadastro"]) {
+  test(`${rota} sem rolagem horizontal na janela do projeto e em 320 px`, async ({ page }) => {
+    await page.goto(rota);
+    await expect(page.locator("main")).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    expect(await larguraExcedente(page)).toBeLessThanOrEqual(0);
+    await page.setViewportSize({ width: 320, height: 640 });
+    await expect.poll(() => larguraExcedente(page)).toBeLessThanOrEqual(0);
+  });
+}
 
 /* Fim de fluxo.spec.ts */
