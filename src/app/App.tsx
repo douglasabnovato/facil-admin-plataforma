@@ -2,6 +2,8 @@
  * App.tsx — provedores (React Query, Auth, tooltips, toasts) e rotas. Páginas carregadas sob demanda.
  * O basename segue o caminho publicado (VITE_BASE), para funcionar no GitHub Pages.
  * O Layout logado também é carregado sob demanda: a primeira carga da /demonstracao não leva o supabase-js nem os menus do Radix.
+ * A /demonstracao (porta de entrada pública) vem no bundle principal, sem `lazy`: o h1 dela é o elemento do LCP e
+ * não pode esperar um segundo pedido de JS (#36). A página tem só dados fictícios e não importa o Supabase.
  */
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -13,6 +15,7 @@ import { AuthProvider } from "@/features/auth/AuthContext";
 import { configurado } from "@/lib/config";
 import { RotaProtegida } from "./RotaProtegida";
 import { NaoEncontrada, Privacidade, Termos } from "./Paginas";
+import Demonstracao from "@/features/demonstracao/Demonstracao";
 
 const Layout = lazy(() => import("./Layout"));
 const Entrar = lazy(() => import("@/features/auth/Entrar"));
@@ -33,7 +36,6 @@ const ContratacaoDetalhe = lazy(() => import("@/features/contratacoes/Contrataca
 const PerfilFornecedor = lazy(() => import("@/features/fornecedores/PerfilFornecedor"));
 const Notificacoes = lazy(() => import("@/features/notificacoes/Notificacoes"));
 const Admin = lazy(() => import("@/features/admin/Admin"));
-const Demonstracao = lazy(() => import("@/features/demonstracao/Demonstracao"));
 
 const cliente = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: false } },
