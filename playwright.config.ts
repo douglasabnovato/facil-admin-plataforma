@@ -1,7 +1,8 @@
 /*
  * playwright.config.ts — ponta a ponta no navegador (critério 3): sobe o build de produção com `vite preview`
- * numa porta própria e roda em desktop e celular (375 px). O app não tem tema escuro próprio (sem `.dark` nem
- * `prefers-color-scheme` no CSS), por isso não há projeto "escuro": ele repetiria a tela clara. O Supabase aponta para um endereço que não existe e os testes
+ * numa porta própria e roda em desktop e celular (375 px).
+ * O app não tem tema escuro próprio (sem `.dark` nem `prefers-color-scheme` no CSS),
+ * por isso não há projeto "escuro": ele repetiria a tela clara. O Supabase aponta para um endereço que não existe e os testes
  * cortam as chamadas a ele: a demonstração não usa o banco, e o login mostra a falha de rede.
  */
 import { defineConfig, devices } from "@playwright/test";

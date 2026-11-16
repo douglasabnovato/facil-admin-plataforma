@@ -1,6 +1,6 @@
 # dependabot.yml — PRs semanais de atualização (npm e Actions). Patch e minor vêm agrupados num PR só.
 # Versão maior vem em PR próprio e só o responsável decide (react-router 7 e zod 4: ver docs/adr/0001-alertas-react-router-zod.md).
-# Os alertas de segurança se ligam em Settings, não aqui (issue "Ligar os alertas do Dependabot").
+# Os alertas de segurança se ligam em Settings, não aqui (issue #34).
 version: 2
 updates:
   - package-ecosystem: npm

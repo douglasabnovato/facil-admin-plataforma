@@ -16,7 +16,7 @@ Os alertas do Dependabot estão desligados no repositório (a API responde 403),
 
 ## Decisão
 
-Manter as versões atuais até a migração (issue "Migrar para React Router 7 e zod 4"), com estas mitigações:
+Manter as versões atuais até a migração (issue #35), com estas mitigações:
 
 - **Redirecionamento aberto:** o único caminho vindo de fora que vai para `navigate` ou `<Navigate>` é o destino depois do login (`state.de`). Desde 16/11/2026 ele passa por `destinoSeguro` (`src/lib/destino.ts`), que só aceita caminhos locais e recusa barra invertida, barra dupla e as duas codificadas. Testes: `src/test/destino.test.ts` e o teste de login com sessão em `src/test/telas.test.tsx`.
 - **Hidratação do SSR:** não se aplica. O app é uma SPA (Vite, `BrowserRouter`), sem SSR nem `deserializeErrors`.
@@ -26,4 +26,4 @@ Manter as versões atuais até a migração (issue "Migrar para React Router 7 e
 
 - O critério 9 do `docs/MVP.md` cita esta ADR para cada aviso aberto do `npm audit`.
 - A ADR perde a validade quando a migração entrar na `main`, ou se um aviso novo aparecer.
-- Ligar os alertas do Dependabot é do responsável (issue própria); quando ligados, cada alerta aberto precisa estar aqui ou numa issue.
+- Ligar os alertas do Dependabot é do responsável (issue #34); quando ligados, cada alerta aberto precisa estar aqui ou numa issue.

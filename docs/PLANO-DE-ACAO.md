@@ -17,7 +17,7 @@ Executado em 16/11/2026, nas branches `feature/2026-11-16` → `developer/sprint
   1. Patches de dependências pelo `npm audit fix` e destino do login validado, com teste (alto × baixo). Este ciclo.
   2. ADR com o risco decidido dos alertas que só a versão maior corrige (react-router 7, zod 4) (alto × baixo). Este ciclo; a migração vira issue.
   3. Trocar o projeto "escuro" falso pelo celular, com teste de rolagem horizontal e axe (médio × baixo). Este ciclo.
-  4. Medir o LCP da `/demonstracao` e do `/entrar` no site, que agora roda o código da `main` (#16) (médio × baixo). Este ciclo; a issue é do responsável e só ele fecha.
+  4. Medir o LCP da `/demonstracao` e do `/entrar` no site, que agora roda o código da `main` (médio × baixo). Este ciclo. A #16 fica só com a medição depois da publicação (do responsável, que a fecha); a correção de código, se a mediana passar de 2,5 s, vira issue própria (#36).
   5. `docs/DEPLOY.md` com o passo a passo da Vercel e do Supabase; `dependabot.yml` para atualizações semanais (médio × baixo). Este ciclo.
   6. Ligar os alertas do Dependabot, restaurar o backend, conta do GoatCounter (#2, #17). Responsável.
 - **Fora do escopo:** Supabase, Vercel, Settings, segredos, regras de negócio e as contas de demonstração (risco aceito pelo responsável).

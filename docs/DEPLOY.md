@@ -26,7 +26,7 @@ Variáveis de ambiente do build (nomes; os valores ficam só na Vercel):
 
 ### Conferir o deploy (qualquer pessoa)
 
-1. `gh api repos/douglasabnovato/facil-admin-plataforma/deployments?per_page=1 --jq '.[0].sha'` mostra o commit publicado em Production.
+1. `gh api "repos/douglasabnovato/facil-admin-plataforma/deployments?environment=Production&per_page=1" --jq '.[0].sha'` mostra o commit publicado em Production (sem o filtro, vem o último Preview).
 2. Comparar com `git rev-parse origin/main`.
 3. `curl -s -o /dev/null -w "%{http_code}" https://facil-admin-plataforma.vercel.app/demonstracao` deve dar 200.
 
@@ -52,4 +52,4 @@ O site já carrega o GoatCounter (`https://douglasabnovato.goatcounter.com/count
 
 ## Alertas de segurança (responsável)
 
-Os alertas do Dependabot estão desligados (a API responde 403). O `.github/dependabot.yml` só abre PRs de atualização; os alertas se ligam em **Settings → Code security → Dependabot alerts → Enable**. Passo a passo na issue "Ligar os alertas do Dependabot".
+Os alertas do Dependabot estão desligados (a API responde 403). O `.github/dependabot.yml` só abre PRs de atualização; os alertas se ligam em **Settings → Code security → Dependabot alerts → Enable**. Passo a passo na issue #34.
