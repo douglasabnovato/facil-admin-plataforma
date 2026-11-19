@@ -48,6 +48,10 @@ export default function Cadastro() {
 
   if (usuario) return <Navigate to="/" replace />;
 
+  /* Campo com erro: marcado como inválido e ligado à mensagem, que o leitor de tela lê ao receber o foco (#38). */
+  const anunciar = (campo: keyof Dados) =>
+    formState.errors[campo] ? { "aria-invalid": true, "aria-describedby": `erro-${campo}` } : {};
+
   const cadastrar = async (d: Dados) => {
     const supabase = await clienteSupabase();
     const { data, error } = await supabase.auth.signUp({
@@ -109,32 +113,32 @@ export default function Cadastro() {
         </fieldset>
         <div className="space-y-2">
           <Label htmlFor="nome">Nome completo</Label>
-          <Input id="nome" autoComplete="name" {...register("nome")} />
-          {formState.errors.nome && <p className="text-sm text-destructive">{formState.errors.nome.message}</p>}
+          <Input id="nome" autoComplete="name" {...register("nome")} {...anunciar("nome")} />
+          {formState.errors.nome && <p id="erro-nome" className="text-sm text-destructive">{formState.errors.nome.message}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="telefone">Celular (WhatsApp)</Label>
-          <Input id="telefone" type="tel" autoComplete="tel" placeholder="(32) 99999-0000" {...register("telefone")} />
-          {formState.errors.telefone && <p className="text-sm text-destructive">{formState.errors.telefone.message}</p>}
+          <Input id="telefone" type="tel" autoComplete="tel" placeholder="(32) 99999-0000" {...register("telefone")} {...anunciar("telefone")} />
+          {formState.errors.telefone && <p id="erro-telefone" className="text-sm text-destructive">{formState.errors.telefone.message}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">E-mail</Label>
-          <Input id="email" type="email" autoComplete="email" {...register("email")} />
-          {formState.errors.email && <p className="text-sm text-destructive">{formState.errors.email.message}</p>}
+          <Input id="email" type="email" autoComplete="email" {...register("email")} {...anunciar("email")} />
+          {formState.errors.email && <p id="erro-email" className="text-sm text-destructive">{formState.errors.email.message}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="senha">Senha</Label>
-          <Input id="senha" type="password" autoComplete="new-password" {...register("senha")} />
-          {formState.errors.senha && <p className="text-sm text-destructive">{formState.errors.senha.message}</p>}
+          <Input id="senha" type="password" autoComplete="new-password" {...register("senha")} {...anunciar("senha")} />
+          {formState.errors.senha && <p id="erro-senha" className="text-sm text-destructive">{formState.errors.senha.message}</p>}
         </div>
         <div className="flex items-start gap-2">
-          <Checkbox id="aceite" checked={watch("aceite") === true} onCheckedChange={(v) => setValue("aceite", v === true, { shouldValidate: true })} />
+          <Checkbox id="aceite" {...anunciar("aceite")} checked={watch("aceite") === true} onCheckedChange={(v) => setValue("aceite", v === true, { shouldValidate: true })} />
           <Label htmlFor="aceite" className="text-sm font-normal leading-snug">
             Li e aceito os <Link to="/termos" className="text-primary underline">Termos de Uso</Link> e a{" "}
             <Link to="/privacidade" className="text-primary underline">Política de Privacidade</Link>.
           </Label>
         </div>
-        {formState.errors.aceite && <p className="text-sm text-destructive">{formState.errors.aceite.message}</p>}
+        {formState.errors.aceite && <p id="erro-aceite" className="text-sm text-destructive">{formState.errors.aceite.message}</p>}
         <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
           {formState.isSubmitting ? "Criando conta…" : "Criar conta"}
         </Button>
