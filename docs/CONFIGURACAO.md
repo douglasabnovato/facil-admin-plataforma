@@ -1,6 +1,6 @@
 # Configurações e ferramentas — o que você precisa fazer
 
-> **Atualização de 16/11/2026:** o front saiu do GitHub Pages e está na Vercel (https://facil-admin-plataforma.vercel.app). Os endereços `douglasabnovato.github.io/...` abaixo são da configuração antiga. O passo a passo atual de publicação está em [`DEPLOY.md`](DEPLOY.md).
+> O site está na Vercel: https://facil-admin-plataforma.vercel.app. O GitHub Pages não é usado. A publicação, o estado de cada peça e o passo a passo do responsável ficam em [`DEPLOY.md`](DEPLOY.md); a restauração do backend, na issue #2. Revisto em 18/11/2026 (#37).
 
 > Nomes padrão: **faciladmin**. Se precisar de um segundo nome (outro projeto ou serviço), use **faciladmin-atendimento**.
 > Os valores `douglasabnovato` abaixo seguem o dono dos repositórios atuais; troque se publicar em outra conta.
@@ -13,11 +13,10 @@
 - [ ] (Opcional) Python 3 + `psql`, para rodar o teste de regras do banco localmente (o CI já roda)
 
 ## 2. GitHub
-- [ ] Criar o repositório **público** `facil-admin-plataforma` (GitHub Pages gratuito exige público; o código não tem segredos).
-- [ ] Settings → Pages → Source: **GitHub Actions**.
-- [ ] Settings → Branches → proteger a `main` (PR obrigatório, CI verde).
+- [x] Repositório **público** `facil-admin-plataforma` (o código não tem segredos).
+- [x] `main` protegida por ruleset (PR obrigatório, jobs `front` e `banco` verdes). Conferir: `gh api repos/douglasabnovato/facil-admin-plataforma/rules/branches/main`.
 - [ ] Settings → Secrets and variables → Actions:
-  - **Variables:**
+  - **Variables** (usadas pelo `manter-ativo.yml`; o build do site lê as mesmas variáveis na Vercel, ver [`DEPLOY.md`](DEPLOY.md)):
     - `VITE_SUPABASE_URL` (URL do projeto)
     - `VITE_SUPABASE_PUBLISHABLE_KEY` (chave pública)
   - **Secrets** (usados só pelo workflow manual "Aplicar migrações"):
@@ -33,6 +32,8 @@
 | `manter-ativo.yml` | segundas 12:17 UTC | Consulta leve para o Supabase free não pausar |
 
 ## 3. Supabase (produção)
+> Passo a passo de restauração ou criação, com os botões: issue #2 e [`DEPLOY.md`](DEPLOY.md#backend-no-supabase-responsável-issue-2). Esta seção lista só o que precisa estar configurado.
+
 - [ ] Criar o projeto **`faciladmin`** (região São Paulo) e guardar a senha do banco num gerenciador de senhas.
 - [ ] Limite de projetos gratuitos: com a Volta Express você pode já ter 2 ativos. Nesse caso use o **Supabase local** para desenvolvimento (docs/AMBIENTE-LOCAL.md).
 - [ ] Aplicar as migrações (escolha uma forma):
@@ -40,13 +41,13 @@
   - Pelo GitHub: Actions → **Aplicar migrações** → Run workflow (depois de cadastrar os secrets)
 - [ ] Authentication → Providers → Email: ligado; **Confirm email** ligado.
 - [ ] Authentication → URL Configuration:
-  - Site URL: `https://douglasabnovato.github.io/facil-admin-plataforma/`
+  - Site URL: `https://facil-admin-plataforma.vercel.app`
   - Redirect URLs:
-    - `https://douglasabnovato.github.io/facil-admin-plataforma/**`
+    - `https://facil-admin-plataforma.vercel.app/**`
     - `http://127.0.0.1:5173/**`
 - [ ] Storage: os buckets `documentos`, `fotos-necessidades` e `avatares` são criados pela migração 05. Confira em Storage.
 - [ ] Database → Cron: confira o job `faciladmin-expirar` (criado pela migração 05).
-- [ ] Project Settings → API: copie a URL e a chave pública (publishable/anon) para as Variables do GitHub.
+- [ ] Project Settings → API: copie a URL e a chave pública (publishable/anon) para as Variables do GitHub e para a Vercel (Production), e faça o Redeploy ([`DEPLOY.md`](DEPLOY.md#republicar-depois-de-mudar-variável-responsável)).
 - [ ] Account → Access Tokens: gere o `SUPABASE_ACCESS_TOKEN` (só se for usar o workflow de migrações).
 
 ### Tornar você administrador
@@ -70,8 +71,9 @@ O menu **Admin** aparece no próximo login. Por ele você revisa documentos, ver
 
 ## 6. Landing do síndico (`facil-admin-gestao`) e marketplace (`facil-admin-para-voce`)
 - [ ] Apontar os botões "Entrar" e "Cadastrar" para:
-  - `https://douglasabnovato.github.io/facil-admin-plataforma/entrar`
-  - `https://douglasabnovato.github.io/facil-admin-plataforma/cadastro?tipo=fornecedor` (ou `?tipo=gestor`, `?tipo=condomino`)
+  - `https://facil-admin-plataforma.vercel.app/entrar`
+  - `https://facil-admin-plataforma.vercel.app/cadastro?tipo=fornecedor` (ou `?tipo=gestor`, `?tipo=condomino`)
+  - A troca nos repositórios das landings é feita no ciclo de cada um.
 - [ ] Formspree: criar um formulário só para a página `/plataforma` (leads separados).
 - [ ] Informar os links de LinkedIn, Instagram e WhatsApp.
 - [ ] Confirmar quais depoimentos são reais e autorizados.
