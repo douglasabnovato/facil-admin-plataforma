@@ -1,16 +1,16 @@
 # Publicação (deploy)
 
-Como o site vai ao ar hoje e o passo a passo do que só o responsável faz. Estado conferido em 16/11/2026.
+Como o site vai ao ar hoje e o passo a passo do que só o responsável faz. Estado conferido em 18/11/2026.
 
 ## Visão geral
 
-| Peça | Onde | Quem publica | Estado em 16/11/2026 |
+| Peça | Onde | Quem publica | Estado em 18/11/2026 |
 |---|---|---|---|
-| Front (React + Vite) | Vercel, projeto `facil-admin-plataforma` | A Vercel, a cada push na `main` (integração do GitHub) | No ar: https://facil-admin-plataforma.vercel.app responde 200; o deploy de produção é do commit `26a530f` (merge do PR #27) |
-| Banco, Auth e Storage | Supabase Cloud | Workflow manual `Aplicar migrações` (`.github/workflows/banco.yml`) | Fora do ar: o endereço do build publicado não resolve no DNS (`curl` em `/auth/v1/health`, 16/11/2026: código 6). Ver #2 |
+| Front (React + Vite) | Vercel, projeto `facil-admin-plataforma` | A Vercel, a cada push na `main` (integração do GitHub) | No ar: https://facil-admin-plataforma.vercel.app responde 200; o deploy de produção é do commit `a459a06`, o mesmo da `main` (API de deployments, 18/11/2026) |
+| Banco, Auth e Storage | Supabase Cloud | Workflow manual `Aplicar migrações` (`.github/workflows/banco.yml`) | Fora do ar: o endereço do build publicado não resolve no DNS (`curl` em `/auth/v1/health`, 18/11/2026: código 6). Ver #2 |
 | Agendamento anti-pausa | GitHub Actions (`manter-ativo.yml`) | Toda segunda, 12:17 UTC | Termina com aviso enquanto as Variables estiverem vazias (#19) |
 
-O GitHub Pages não é usado. O `docs/CONFIGURACAO.md` ainda cita endereços do Pages de antes da troca para a Vercel; vale este arquivo.
+O GitHub Pages não é usado. O `docs/CONFIGURACAO.md` lista o que precisa estar configurado e aponta para cá.
 
 ## Front na Vercel
 
@@ -52,4 +52,4 @@ O site já carrega o GoatCounter (`https://douglasabnovato.goatcounter.com/count
 
 ## Alertas de segurança (responsável)
 
-Os alertas do Dependabot estão desligados (a API responde 403). O `.github/dependabot.yml` só abre PRs de atualização; os alertas se ligam em **Settings → Code security → Dependabot alerts → Enable**. Passo a passo na issue #34.
+Os alertas do Dependabot estão ligados: `gh api "repos/douglasabnovato/facil-admin-plataforma/dependabot/alerts?state=open&per_page=100" --jq length` deu 0 em 18/11/2026 (#34). As correções automáticas (**Dependabot security updates**) seguem desligadas (`gh api repos/douglasabnovato/facil-admin-plataforma/automated-security-fixes`: `enabled: false`); o `.github/dependabot.yml` abre os PRs semanais de atualização. PRs de versão maior: triagem na issue #57.
