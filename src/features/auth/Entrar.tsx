@@ -35,7 +35,12 @@ export default function Entrar() {
   if (usuario) return <Navigate to={destino} replace />;
 
   const entrar = async (d: Dados) => {
-    const supabase = await clienteSupabase();
+    const supabase = await clienteSupabase().catch(() => null);
+    if (!supabase) {
+      /* O chunk do cliente não carregou (rede ou deploy novo): mesma mensagem da falha de rede. */
+      toast.error(mensagemAuth("Failed to fetch"));
+      return;
+    }
     const { error } = await supabase.auth.signInWithPassword({ email: d.email, password: d.senha });
     if (error) {
       toast.error(mensagemAuth(error.message));
@@ -51,7 +56,13 @@ export default function Entrar() {
       return;
     }
     setEnviandoLink(true);
-    const supabase = await clienteSupabase();
+    const supabase = await clienteSupabase().catch(() => null);
+    if (!supabase) {
+      /* O chunk do cliente não carregou (rede ou deploy novo): mesma mensagem da falha de rede. */
+      toast.error(mensagemAuth("Failed to fetch"));
+      setEnviandoLink(false);
+      return;
+    }
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: urlDoApp("/nova-senha") });
     setEnviandoLink(false);
     if (error) toast.error(mensagemAuth(error.message));

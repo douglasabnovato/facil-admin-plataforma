@@ -53,7 +53,12 @@ export default function Cadastro() {
     formState.errors[campo] ? { "aria-invalid": true, "aria-describedby": `erro-${campo}` } : {};
 
   const cadastrar = async (d: Dados) => {
-    const supabase = await clienteSupabase();
+    const supabase = await clienteSupabase().catch(() => null);
+    if (!supabase) {
+      /* O chunk do cliente não carregou (rede ou deploy novo): mesma mensagem da falha de rede. */
+      toast.error(mensagemAuth("Failed to fetch"));
+      return;
+    }
     const { data, error } = await supabase.auth.signUp({
       email: d.email,
       password: d.senha,
@@ -138,7 +143,7 @@ export default function Cadastro() {
             <Link to="/privacidade" className="text-primary underline">Política de Privacidade</Link>.
           </Label>
         </div>
-        {formState.errors.aceite && <p id="erro-aceite" className="text-sm text-destructive">{formState.errors.aceite.message}</p>}
+        {formState.errors.aceite && <p id="erro-aceite" role="alert" className="text-sm text-destructive">{formState.errors.aceite.message}</p>}
         <Button type="submit" className="w-full" disabled={formState.isSubmitting}>
           {formState.isSubmitting ? "Criando conta…" : "Criar conta"}
         </Button>

@@ -57,8 +57,8 @@ afterEach(() => {
 });
 
 describe("quandoPuder nas páginas públicas", () => {
-  it("na /demonstracao, o pedido do supabase-js só sai depois de dois quadros pintados e do ócio", async () => {
-    window.history.replaceState({}, "", "/demonstracao");
+  it.each(["/demonstracao", "/entrar", "/cadastro"])("em %s, o pedido do supabase-js só sai depois de dois quadros pintados e do ócio", async (rota) => {
+    window.history.replaceState({}, "", rota);
     const estado = pedirSupabase();
 
     ficarOcioso();
