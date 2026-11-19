@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/lib/supabase";
+import { clienteSupabase } from "@/lib/clienteSupabase";
 import type { TipoPerfil } from "@/lib/tipos";
 import { useAuth } from "./contexto";
 import { LayoutAuth } from "./LayoutAuth";
@@ -49,6 +49,7 @@ export default function Cadastro() {
   if (usuario) return <Navigate to="/" replace />;
 
   const cadastrar = async (d: Dados) => {
+    const supabase = await clienteSupabase();
     const { data, error } = await supabase.auth.signUp({
       email: d.email,
       password: d.senha,

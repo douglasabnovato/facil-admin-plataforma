@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/lib/supabase";
+import { clienteSupabase } from "@/lib/clienteSupabase";
 import { useAuth } from "./contexto";
 import { LayoutAuth } from "./LayoutAuth";
 import { urlDoApp } from "@/app/urls";
@@ -35,6 +35,7 @@ export default function Entrar() {
   if (usuario) return <Navigate to={destino} replace />;
 
   const entrar = async (d: Dados) => {
+    const supabase = await clienteSupabase();
     const { error } = await supabase.auth.signInWithPassword({ email: d.email, password: d.senha });
     if (error) {
       toast.error(mensagemAuth(error.message));
@@ -50,6 +51,7 @@ export default function Entrar() {
       return;
     }
     setEnviandoLink(true);
+    const supabase = await clienteSupabase();
     const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: urlDoApp("/nova-senha") });
     setEnviandoLink(false);
     if (error) toast.error(mensagemAuth(error.message));
