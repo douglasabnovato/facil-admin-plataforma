@@ -1,6 +1,6 @@
 /*
  * App.tsx — provedores (React Query, Auth, tooltips, toasts) e rotas. Páginas carregadas sob demanda.
- * O basename segue o caminho publicado (VITE_BASE), para funcionar no GitHub Pages.
+ * O basename segue o caminho publicado (VITE_BASE); no site da Vercel é "/".
  * O Layout logado também é carregado sob demanda: a primeira carga da /demonstracao não leva o supabase-js nem os menus do Radix.
  * A /demonstracao (porta de entrada pública) vem no bundle principal, sem `lazy`: o h1 dela é o elemento do LCP e
  * não pode esperar um segundo pedido de JS (#36). A página tem só dados fictícios e não importa o Supabase.

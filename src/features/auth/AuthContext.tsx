@@ -1,35 +1,18 @@
 /*
  * AuthContext.tsx — sessão do Supabase Auth e perfil do usuário (tabela perfis) para toda a aplicação.
- * O cliente do Supabase é importado sob demanda. Nas páginas públicas (demonstração, termos, privacidade),
- * a importação espera o navegador ficar ocioso, para não disputar a rede com a primeira pintura.
+ * O cliente do Supabase é importado sob demanda. Nas páginas que pintam sem a sessão (demonstração, termos,
+ * privacidade, login e cadastro), a importação espera o navegador ficar ocioso, para não disputar a rede com a
+ * primeira pintura (quandoPuder.ts).
  */
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Session } from "@supabase/supabase-js";
 import type { Perfil } from "@/lib/tipos";
+import { clienteSupabase } from "@/lib/clienteSupabase";
 import { AuthContexto, type AuthValor } from "./contexto";
+import { quandoPuder } from "./quandoPuder";
 
-/* Cliente do Supabase, carregado uma vez e sob demanda. */
-const cliente = () => import("@/lib/supabase").then((m) => m.supabase);
-
-const PUBLICAS = ["/demonstracao", "/termos", "/privacidade"];
-
-/*
- * Nas páginas públicas, espera o load, a primeira pintura e o navegador ocioso; nas demais, segue na hora.
- * Os dois requestAnimationFrame garantem que um quadro já foi pintado: sem eles, quando a primeira pintura
- * vinha depois do load, o supabase-js (~59 kB gzip) disputava a rede com o h1 do LCP (#36).
- * Em aba oculta o requestAnimationFrame não roda: a sessão só carrega quando a aba aparece (só nas páginas públicas).
- */
-function quandoPuder(): Promise<void> {
-  const caminho = window.location.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ""), "");
-  if (!PUBLICAS.some((p) => caminho.startsWith(p))) return Promise.resolve();
-  return new Promise((ok) => {
-    const depoisDaPintura = (fn: () => void) => requestAnimationFrame(() => requestAnimationFrame(fn));
-    const ocioso = () =>
-      depoisDaPintura(() => ("requestIdleCallback" in window ? window.requestIdleCallback(() => ok(), { timeout: 3000 }) : setTimeout(ok, 1500)));
-    if (document.readyState === "complete") ocioso();
-    else window.addEventListener("load", ocioso, { once: true });
-  });
-}
+/* Cliente do Supabase, carregado uma vez e sob demanda, no momento de quandoPuder() (#36, #42). */
+const cliente = clienteSupabase;
 
 /* Provedor: acompanha a sessão e carrega o perfil quando o usuário muda. */
 export function AuthProvider({ children }: { children: ReactNode }) {

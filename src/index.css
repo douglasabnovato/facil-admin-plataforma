@@ -47,4 +47,16 @@
   }
 }
 
+/*
+ * Avisos do sonner com richColors: o vermelho padrão (#e60000 sobre #fff0f0) dá 4,34:1, abaixo de 4,5:1 (axe no
+ * cadastro, #38). As cores do texto passam a vir dos tokens do app; os fundos claros do sonner ficam.
+ * As variáveis vão no próprio aviso, para vencer as do sonner, que ele injeta depois deste CSS.
+ */
+[data-sonner-toaster][data-theme="light"] [data-sonner-toast][data-rich-colors="true"] {
+  --error-text: hsl(var(--destructive));
+  --success-text: hsl(var(--success));
+  --warning-text: hsl(var(--warning));
+  --info-text: hsl(var(--primary));
+}
+
 /* Fim de index.css */

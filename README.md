@@ -6,7 +6,7 @@
 
 ## Estado e próximos passos (ciclo de 16/11/2026)
 
-Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` responde 200 em 16/11/2026, com o código da `main`). Login e cadastro não funcionam enquanto o backend estiver fora do ar (#2). Critérios: **8 de 12 atendidos, Finalizado: não**, em [docs/MVP.md](docs/MVP.md): o LCP medido no site ficou em 2,79 s (meta: 2,5 s), e a correção é de código (#36).
+Site publicado: https://facil-admin-plataforma.vercel.app (`/demonstracao` responde 200 em 18/11/2026, com o código da `main`). Login e cadastro não funcionam enquanto o backend estiver fora do ar (#2). Critérios: **8 de 12 atendidos, Finalizado: não**, em [docs/MVP.md](docs/MVP.md): no site, o LCP da `/demonstracao` ficou em 1,56 s e o do `/entrar` em 3,13 s (meta: 2,5 s); a correção do login é de código (#58) e espera o merge na `main`.
 
 **O que foi feito em 16/11/2026** (PR #39, entra na `developer/sprint-2026-11-19`)
 
