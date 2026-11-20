@@ -6,11 +6,20 @@
 
 **Finalizado:** não
 
+## Produto
+
+- **Problema:** condomínios precisam pedir, comparar e aprovar serviços com prestação de contas; fornecedores de facilities precisam achar essas demandas na sua região e categoria.
+- **Público:** síndicos e administradoras de condomínio, de um lado; fornecedores de facilities, do outro.
+- **Hipótese:** acreditamos que, se uma lista publicada receber ao menos 3 propostas comparáveis por item, o condomínio escolhe em até 7 dias, sem pedir orçamento por fora. Saberemos quando a consulta no banco e os eventos do GoatCounter mostrarem esse número em 4 semanas de uso.
+- **Métrica:** parcela das listas com 3 propostas ou mais que têm proposta escolhida em até 7 dias, medido por consulta no banco (listas publicadas, propostas por lista e dias até `escolher_proposta`) e pelos eventos `lista-publicar` e `demonstracao-escolher` do GoatCounter — meta: 60% no piloto. Depende do backend (#2) e da conta de medição (#17).
+
 **Problema e público:** síndicos e administradoras de condomínio precisam pedir, comparar e aprovar serviços com prestação de contas; fornecedores de facilities precisam achar essas demandas na sua região e categoria.
 
 **Hipótese:** acreditamos que, se uma lista publicada receber ao menos 3 propostas comparáveis por item, o condomínio escolhe em até 7 dias, sem pedir orçamento por fora. **Meta:** no piloto, 60% das listas com 3 propostas ou mais têm proposta escolhida em até 7 dias. **Saberemos quando** a consulta no banco (listas publicadas, propostas por lista e dias até `escolher_proposta`) e os eventos `lista-publicar` e `demonstracao-escolher` do GoatCounter mostrarem esse número em 4 semanas de uso. Depende do backend (#2) e da conta de medição (#17).
 
 **Fora do MVP:** pagamento na plataforma, emissão de nota, aplicativo móvel, medição de IoT e e-mail com domínio próprio.
+
+## Critérios
 
 | # | Critério | Situação em 18/11/2026 | Evidência (comando, data e resultado) ou o que falta | Issue |
 |---|---|---|---|---|
@@ -36,6 +45,8 @@
 ## Histórico
 
 Tabelas e revisões anteriores, mantidas como registro. O estado vale só na tabela do topo.
+
+- 20/11/2026: bloco Produto padronizado, sem mudar critérios.
 
 ### Revisão de 18/11/2026 (LCP no site com a `main`)
 
